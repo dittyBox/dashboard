@@ -8,6 +8,14 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import theme from "@/app/theme";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import IconButton from '@mui/material/IconButton';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import TextField from '@mui/material/TextField';
 
 export default function Cards(props: any) {
 
@@ -16,19 +24,26 @@ export default function Cards(props: any) {
   return (
     <Card ref={ref}>
       <CardActionArea>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+        <CardContent sx={{ height: "30px" }}>
+          <Typography color="primary">
             {props.config.name}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
+        <FormGroup>
+          <FormControlLabel control={<Checkbox defaultChecked />} label={<Typography color='primary'>사용유무</Typography>} />
+        </FormGroup>
+        <IconButton color="primary" aria-label="add an alarm">
+          <RemoveCircleIcon />
+        </IconButton>
+        <TextField sx={{ width: "30px", input:{ color: theme.palette.text.secondary }  }} variant="standard" color="primary" />
+        <IconButton color="primary" aria-label="add an alarm">
+          <AddCircleIcon />
+        </IconButton>
+        <Typography color="primary">
+          유지시간(초)
+        </Typography>
       </CardActions>
     </Card>
   )

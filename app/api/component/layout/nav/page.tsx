@@ -18,7 +18,7 @@ export default function Nav() {  return (
         {['메뉴1', '메뉴2', '메뉴3', '메뉴4'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
-              <ListItemIcon sx={{color:"text.secondary"}}>
+              <ListItemIcon sx={{color:"text.primary"}}>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
@@ -31,7 +31,7 @@ export default function Nav() {  return (
         {['메뉴5', '메뉴6', '메뉴7'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
-              <ListItemIcon sx={{color:"text.secondary"}}>
+              <ListItemIcon sx={{color:"text.primary"}}>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
