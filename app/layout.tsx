@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import { useSearchParams } from 'next/navigation';
+
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
 import theme from "./theme";
 
@@ -23,8 +25,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [state, setState] = useState(false);
-
+  const searchParams = useSearchParams();
+  let mode = searchParams.get("mode") == null ? true : false;
+  const [state, setState] = useState(mode);
   const toggleDrawer =
     (vl: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -44,22 +47,13 @@ export default function RootLayout({
       console.log(state);
     };
 
-    const DrawerHeader = styled('div')(({ theme }) => ({
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-      justifyContent: 'flex-end',
-    }));
-
   return (
     <html lang="en">
       <body>
         <Box sx={{ display: 'flex' }}>
           <ThemeProvider theme={theme}>
           <CssBaseline />
-            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} />
+            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} />
             <Drawer
               sx={{
                 width: drawerWidth,
@@ -74,7 +68,7 @@ export default function RootLayout({
               open={state}
               onClose={toggleDrawer(state)}
             >
-              <Nav />
+              <Nav drawerBool={state} toggleFn={toggleDrawer1}/>
             </Drawer>
             <Box 
         sx={{

@@ -37,7 +37,7 @@ export default function Cards(props: any) {
         <IconButton color="primary" aria-label="add an alarm">
           <RemoveCircleIcon />
         </IconButton>
-        <TextField sx={{ width: "30px", input:{ color: theme.palette.text.secondary }  }} variant="standard" color="primary" />
+        
         <IconButton color="primary" aria-label="add an alarm">
           <AddCircleIcon />
         </IconButton>

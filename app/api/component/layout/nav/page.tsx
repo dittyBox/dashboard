@@ -1,4 +1,6 @@
 import * as React from 'react';
+import NextLink from 'next/link';
+import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,36 +12,59 @@ import ListItemText from '@mui/material/ListItemText';
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 
-export default function Nav() {  return (
-  <Box sx={{backgroundColor:"#343a40", height:"100%"}}>
-  <Toolbar />
+interface Props {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window?: () => Window;
+  drawerBool: boolean;
+  toggleFn: any;
+}
+
+export default function Nav(props: Props) {
+  return (
+    <Box sx={{ backgroundColor: "#343a40", height: "100%" }}>
+      <Toolbar />
       <Divider />
       <List>
-        {['메뉴1', '메뉴2', '메뉴3', '메뉴4'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon sx={{color:"text.primary"}}>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem key="메뉴1" disablePadding>
+          <ListItemButton component="a" href="menu1">
+            <ListItemIcon sx={{ color: "text.primary" }}>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="메뉴1" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="메뉴2" disablePadding>
+          <ListItemButton component="a" href="menu2">
+            <ListItemIcon sx={{ color: "text.primary" }}>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="메뉴2" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="메뉴3" disablePadding>
+          <ListItemButton component="a" href="menu3">
+            <ListItemIcon sx={{ color: "text.primary" }}>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="메뉴3" />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
       <List>
-        {['메뉴5', '메뉴6', '메뉴7'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon sx={{color:"text.primary"}}>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem key="설정" disablePadding>
+          <ListItemButton component="a" href="/">
+            <ListItemIcon sx={{ color: "text.primary" }}>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="설정" />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
-</Box>
-)
+    </Box>
+  )
 }

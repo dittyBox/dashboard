@@ -10,16 +10,13 @@ export default function Home() {
         justifyContent="center"
         alignItems="center" >
         <Grid sx={{width:"500px"}}>
-          <Cards config={{id:1,name:"메뉴1",useYn:"Y"}} />
+          <Cards config={{cardId:1,name:"메뉴1",useYn:"Y"}} />
         </Grid>
         <Grid sx={{width:"500px"}}>
-          <Cards config={{id:2,name:"메뉴2",useYn:"Y"}} />
+          <Cards config={{cardId:2,name:"메뉴2",useYn:"Y"}} />
         </Grid>
         <Grid sx={{width:"500px"}}>
-          <Cards config={{id:3,name:"메뉴3",useYn:"Y"}} />
-        </Grid>
-        <Grid sx={{width:"500px"}}>
-          <Cards config={{id:4,name:"메뉴4",useYn:"Y"}} />
+          <Cards config={{cardId:3,name:"메뉴3",useYn:"Y"}} />
         </Grid>
       </Grid>
     </Box>
