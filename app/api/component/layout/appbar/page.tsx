@@ -11,7 +11,6 @@ import Switch from '@mui/material/Switch';
 import {lightBlue} from '@mui/material/colors'
 import theme from '@/app/theme';
 import { alpha } from '@mui/material/styles';
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 interface Props {
   /**
@@ -32,7 +31,6 @@ export default function AppBarComp(props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   
   const [checked, setChecked] = React.useState(!mode);
-  const handle = useFullScreenHandle();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
