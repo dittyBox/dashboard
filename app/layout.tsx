@@ -71,7 +71,22 @@ export default function RootLayout({
   }
 
   const moveMenu = (arrow: string) => {
-
+    const menuDataUse = menuData.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+    if (menuDataUse != undefined) {
+      if (arrow == 'L') {
+        console.log('L');
+        setSecondsRemaining(0);
+        setState(true);
+        router.push(usePathnm);
+      } else if (arrow == 'R') {
+        console.log('R');
+        setSecondsRemaining(0);
+        setState(true);
+        router.push(usePathnm);
+      } else {
+        return;
+      }
+    }
   }
 
   useEffect(() => {
@@ -113,7 +128,8 @@ export default function RootLayout({
         <Box sx={{ display: 'flex' }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} toggleMode={toggleMode} />
+            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} toggleMode={toggleMode}
+            moveMenu={moveMenu} />
             <Drawer
               sx={{
                 width: drawerWidth,

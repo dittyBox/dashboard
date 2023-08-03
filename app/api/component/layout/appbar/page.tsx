@@ -23,13 +23,14 @@ interface Props {
   toggleFn: any;
   mode: boolean;
   toggleMode: any;
+  moveMenu: any;
 }
 
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
 
 export default function AppBarComp(props: Props) {
-  let { window, drawerBool, toggleFn, mode, toggleMode } = props;
+  let { window, drawerBool, toggleFn, mode, toggleMode, moveMenu } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   
   const [checked, setChecked] = React.useState(!mode);
@@ -49,6 +50,16 @@ export default function AppBarComp(props: Props) {
       toggleFn(drawerBool);
     }
   }
+
+  const clickArrowLHandler = () => {
+    moveMenu('L');
+    setChecked(false);
+  }
+  const clickArrowRHandler = () => {
+    moveMenu('R');
+    setChecked(false);
+  }
+
   return (
     <AppBar position="fixed" style={{ backgroundColor: "#343a40", boxShadow: "none" }}
       sx={{
@@ -75,8 +86,9 @@ export default function AppBarComp(props: Props) {
           aria-label="account of current user"
           aria-controls="menu-appbar"
           aria-haspopup="true"
-          //onClick={handleMenu}
+          onClick={clickArrowLHandler}
           color="inherit"
+          id="L"
         >
         {/* sx={(
           '& .MuiSwitch-switchBase.Mui-checked': {
@@ -109,7 +121,7 @@ export default function AppBarComp(props: Props) {
           aria-label="account of current user"
           aria-controls="menu-appbar"
           aria-haspopup="true"
-          //onClick={handleMenu}
+          onClick={clickArrowRHandler}
           color="inherit"
         >
           <KeyboardDoubleArrowRightIcon />
