@@ -20,9 +20,9 @@ export const metadata = {
 }
 
 const menuData = [
-  {menuId: 'menu1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1},
-  {menuId: 'menu2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2},
-  {menuId: 'menu3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3},
+  { menuId: 'menu1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
+  { menuId: 'menu2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
+  { menuId: 'menu3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
 ]
 
 export default function RootLayout({
@@ -40,38 +40,52 @@ export default function RootLayout({
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [redirectTo, setRedirectTo] = useState('/');
 
-  const toggleDrawer =
-    (vl: boolean) =>
-      (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-          event.type === 'keydown' &&
-          ((event as React.KeyboardEvent).key === 'Tab' ||
-            (event as React.KeyboardEvent).key === 'Shift')
-        ) {
-          return;
-        }
-        setState(vl);
-      };
-
-  const toggleDrawer1 =
-    (vl: boolean) => {
+  const toggleDrawer = (vl: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
       setState(vl);
-      console.log(state);
     };
 
+  const toggleDrawer1 = (vl: boolean) => {
+    setState(vl);
+    console.log(state);
+  };
+
+  const toggleMode = (vl: boolean) => {
+    console.log(vl);
+    if(vl){
+      setSecondsRemaining(0);
+      setState(false);
+      router.push(`${usePathnm}?mode=play`);
+    } else {
+      setSecondsRemaining(0);
+      setState(true);
+      router.push(usePathnm);
+    }
+  }
+
+  const moveMenu = (arrow: string) => {
+
+  }
 
   useEffect(() => {
     if (!mode) {
-      if(secondsRemaining == 0){
-        const menuDataUse = menuData.filter(e=>e.useYn === 'Y').find(e=>e.menuId == usePathnm.replace('/',''));
-        if(menuDataUse == undefined) {
+      if (secondsRemaining == 0) {
+        const menuDataUse = menuData.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+        if (menuDataUse == undefined) {
           setRedirectTo('/');
         } else {
           let sortMax = menuDataUse.sort;
-          const findSortMax = menuData.filter(e=>e.useYn === 'Y').find(e=>e.sort > sortMax);
-          if(findSortMax == undefined){
-            const sortMin = menuData.reduce((acc, cur, idx) => { if(acc == 0){return cur.sort} else { return acc > cur.sort ? cur.sort : acc } }, 0);
-            const findData = menuData.find(e=>e.sort == sortMin);
+          const findSortMax = menuData.filter(e => e.useYn === 'Y').find(e => e.sort > sortMax);
+          if (findSortMax == undefined) {
+            const sortMin = menuData.reduce((acc, cur, idx) => { if (acc == 0) { return cur.sort } else { return acc > cur.sort ? cur.sort : acc } }, 0);
+            const findData = menuData.find(e => e.sort == sortMin);
             setRedirectTo(findData == undefined ? '/' : findData.endPoint);
             setSecondsRemaining(findData == undefined ? 0 : findData.setTimer);
           } else {
@@ -81,25 +95,25 @@ export default function RootLayout({
         }
       }
       console.log(`${secondsRemaining}      ${redirectTo}`);
-      
+
       const timer = setTimeout(() => {
         setSecondsRemaining((prevSecondsRemaining) => prevSecondsRemaining - 1);
         if (secondsRemaining === 2) router.push(redirectTo);
       }, 1000);
-  
+
       return () => {
         console.log('end');
         clearInterval(timer);
       };
     }
-  }, [router,secondsRemaining, mode]);
+  }, [router, secondsRemaining, mode]);
   return (
     <html lang="en">
       <body>
         <Box sx={{ display: 'flex' }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} />
+            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} toggleMode={toggleMode} />
             <Drawer
               sx={{
                 width: drawerWidth,

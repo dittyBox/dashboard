@@ -6,11 +6,12 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import Switch from '@mui/material/Switch';
 import {lightBlue} from '@mui/material/colors'
 import theme from '@/app/theme';
 import { alpha } from '@mui/material/styles';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 interface Props {
   /**
@@ -21,19 +22,22 @@ interface Props {
   drawerBool: boolean;
   toggleFn: any;
   mode: boolean;
+  toggleMode: any;
 }
 
 const drawerWidth = 240;
 const navItems = ['Home', 'About', 'Contact'];
 
 export default function AppBarComp(props: Props) {
-  let { window, drawerBool, toggleFn, mode } = props;
+  let { window, drawerBool, toggleFn, mode, toggleMode } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   
   const [checked, setChecked] = React.useState(!mode);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+    const checkedVal = event.target.checked;
+    setChecked(checkedVal);
+    toggleMode(checkedVal);
   };
 
   const clickTogleHandler = () => {
@@ -82,7 +86,7 @@ export default function AppBarComp(props: Props) {
             },
           },
         )} */}
-          <AccountCircle />
+          <KeyboardDoubleArrowLeftIcon />
         </IconButton>
         <Switch
           sx={{
@@ -108,7 +112,7 @@ export default function AppBarComp(props: Props) {
           //onClick={handleMenu}
           color="inherit"
         >
-          <AccountCircle />
+          <KeyboardDoubleArrowRightIcon />
         </IconButton>
       </Toolbar>
     </AppBar>
