@@ -9,8 +9,6 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
 import theme from "./theme";
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import Timer from './api/component/timer/timer';
 
 const drawerWidth = 240;
 
@@ -31,7 +29,6 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const router = useRouter();
-  const handle = useFullScreenHandle();
   const searchParams = useSearchParams();
   const usePathnm = usePathname();
   let mode = searchParams.get("mode") == null ? true : false;
@@ -56,9 +53,20 @@ export default function RootLayout({
     setState(vl);
     console.log(state);
   };
+  
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen()
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      }
+    }
+  }
 
   const toggleMode = (vl: boolean) => {
     console.log(vl);
+    toggleFullScreen();
     if(vl){
       setSecondsRemaining(0);
       setState(false);
@@ -73,16 +81,60 @@ export default function RootLayout({
   const moveMenu = (arrow: string) => {
     const menuDataUse = menuData.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
     if (menuDataUse != undefined) {
+      if (document.fullscreenElement != null) {
+        document.exitFullscreen()
+      }
       if (arrow == 'L') {
-        console.log('L');
         setSecondsRemaining(0);
         setState(true);
-        router.push(usePathnm);
+        const sortData = menuData.sort((a,b)=>
+        {
+          if(a.sort > b.sort){
+            return -1; 
+          } else if(a.sort === b.sort) {
+            return 0; 
+          } else return 1;
+        }).find(e=>e.sort<menuDataUse.sort)
+
+        if(sortData == undefined){
+          const MaxData = menuData.sort((a,b)=>
+          {
+            if(a.sort > b.sort){
+              return -1; 
+            } else if(a.sort === b.sort) {
+              return 0; 
+            } else return 1;
+          })[0]
+          router.push(`/${MaxData.menuId}`);
+        } else {
+          router.push(`/${sortData.menuId}`);
+        }
       } else if (arrow == 'R') {
-        console.log('R');
         setSecondsRemaining(0);
         setState(true);
-        router.push(usePathnm);
+
+        const sortData = menuData.sort((a,b)=>
+        {
+          if(a.sort > b.sort){
+            return 1; 
+          } else if(a.sort === b.sort) {
+            return 0; 
+          } else return -1;
+        }).find(e=>e.sort > menuDataUse.sort)
+
+        if(sortData == undefined){
+          const MaxData = menuData.sort((a,b)=>
+          {
+            if(a.sort > b.sort){
+              return 1; 
+            } else if(a.sort === b.sort) {
+              return 0; 
+            } else return -1;
+          })[0]
+          router.push(`/${MaxData.menuId}`);
+        } else {
+          router.push(`/${sortData.menuId}`);
+        }
       } else {
         return;
       }
