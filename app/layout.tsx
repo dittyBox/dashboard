@@ -17,7 +17,7 @@ export const metadata = {
   description: 'GMOMpro DashBoard',
 }
 
-const menuData = [
+const menuData: MenuType[] = [
   { menuId: 'menu1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
   { menuId: 'menu2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
   { menuId: 'menu3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
@@ -30,7 +30,7 @@ export default function RootLayout({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const usePathnm = usePathname();
+  let usePathnm = usePathname();
   let mode = searchParams.get("mode") == null ? true : false;
   const [state, setState] = useState(mode);
 
@@ -144,6 +144,10 @@ export default function RootLayout({
   useEffect(() => {
     if (!mode) {
       if (secondsRemaining == 0) {
+        if(usePathnm == '/'){
+          usePathnm = menuData.filter(e => e.useYn === 'Y')[0].menuId;
+          router.push(menuData.filter(e => e.useYn === 'Y')[0].endPoint);
+        }
         const menuDataUse = menuData.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
         if (menuDataUse == undefined) {
           setRedirectTo('/');
