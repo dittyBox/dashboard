@@ -10,7 +10,6 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
 import theme from "./theme";
-import Home from './page';
 
 const drawerWidth = 240;
 
@@ -26,9 +25,9 @@ const menuData: MenuType[] = [
 ]
 
 export default function RootLayout({
-  children
+  children,
 }: {
-  children: React.ReactElement
+  children: React.ReactNode;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -143,14 +142,6 @@ export default function RootLayout({
     }
   }
 
-  const getMenuStorageHandler = () => {
-    
-  }
-
-  const setMenuStorageHandler = () => {
-    
-  }
-
   useEffect(() => {
     if (!mode) {
       if (secondsRemaining == 0) {
@@ -231,7 +222,7 @@ export default function RootLayout({
                   marginLeft: 0,
                 }), height: "100%"
               }}>
-              <Home getMenuStorageHandler={getMenuStorageHandler} setMenuStorageHandler={setMenuStorageHandler}/>
+              {children}
             </Box>
           </ThemeProvider>
         </Box>
