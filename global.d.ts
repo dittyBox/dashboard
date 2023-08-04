@@ -5,5 +5,5 @@ export declare global {
     useYn: string;
     endPoint: string;
     sort: number;
-  }
+  };
 }

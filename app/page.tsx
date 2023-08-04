@@ -1,9 +1,23 @@
+"use client"
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Cards from './api/component/card/page'
+import { useState, useEffect } from 'react';
 
 
-export default function Home() {
+interface Props {
+  getMenuStorageHandler: any;
+  setMenuStorageHandler: any;
+};
+
+export default function Home(props: Props) {
+  
+  console.log(props);
+
+
+  useEffect(()=>{
+  },[]);
+
   return (
     <Box component="main" sx={{ marginTop: "50px" }}>
       <Grid container spacing={1} direction="column"

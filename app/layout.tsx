@@ -3,12 +3,14 @@ import './globals.css'
 import AppBarComp from './api/component/layout/appbar/page'
 import Nav from './api/component/layout/nav/page'
 import Box from '@mui/material/Box';
-import { useState, useEffect } from 'react';
+import { getMenuStorage, setMenuStorage } from './api/fech/storage'
+import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
 import theme from "./theme";
+import Home from './page';
 
 const drawerWidth = 240;
 
@@ -24,9 +26,9 @@ const menuData: MenuType[] = [
 ]
 
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode
+  children: React.ReactElement
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -141,6 +143,14 @@ export default function RootLayout({
     }
   }
 
+  const getMenuStorageHandler = () => {
+    
+  }
+
+  const setMenuStorageHandler = () => {
+    
+  }
+
   useEffect(() => {
     if (!mode) {
       if (secondsRemaining == 0) {
@@ -178,6 +188,8 @@ export default function RootLayout({
       };
     }
   }, [router, secondsRemaining, mode]);
+
+
   return (
     <html lang="en">
       <body>
@@ -219,7 +231,7 @@ export default function RootLayout({
                   marginLeft: 0,
                 }), height: "100%"
               }}>
-              {children}
+              <Home getMenuStorageHandler={getMenuStorageHandler} setMenuStorageHandler={setMenuStorageHandler}/>
             </Box>
           </ThemeProvider>
         </Box>
