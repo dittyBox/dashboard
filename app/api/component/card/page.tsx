@@ -56,7 +56,6 @@ export default function Cards(props: any) {
 
   useEffect(()=>{
     setTimer(config.setTimer);
-    console.log(`asdasdasd    ${config.setTimer}`);
   }, [props])
 
   return (

@@ -52,7 +52,6 @@ export default function Home() {
         alignItems="center" >
         {
           useMenu.map(menu => {
-            console.log(menu.setTimer);
             return (
               <Grid key={menu.menuId} sx={{ width: "500px" }}>
                 <Cards config={menu} changeMenuHandler={changeMenuHandler} />

@@ -168,10 +168,8 @@ export default function RootLayout({
   useEffect(()=>{
     const getStorageMenus = localStorage.getItem("menus");
     if(getStorageMenus != null){
-      console.log(true);
       setMenus(JSON.parse(getStorageMenus));
     } else {
-      console.log(false);
       setMenus(defaultSetMenu);
     }
   },[])
@@ -199,7 +197,6 @@ export default function RootLayout({
           setSecondsRemaining(findSortMax.setTimer);
         }
       }
-      console.log(`${secondsRemaining}      ${redirectTo}`);
 
       const timer = setTimeout(() => {
         setSecondsRemaining((prevSecondsRemaining) => prevSecondsRemaining - 1);
@@ -210,7 +207,6 @@ export default function RootLayout({
       }, 1000);
 
       return () => {
-        console.log('end');
         clearInterval(timer);
       };
     }
