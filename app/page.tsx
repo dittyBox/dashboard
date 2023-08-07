@@ -25,6 +25,7 @@ export default function Home() {
     menus.menus = DefaultMenuTemp;
     menus.changeMenus(DefaultMenuTemp);
     setUseMenu(DefaultMenuTemp);
+    console.log(DefaultMenu);
     router.refresh();
   }
 
