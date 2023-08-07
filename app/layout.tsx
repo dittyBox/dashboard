@@ -4,14 +4,14 @@ import AppBarComp from './api/component/layout/appbar/page'
 import Nav from './api/component/layout/nav/page'
 import Box from '@mui/material/Box';
 import { getMenuStorage, setMenuStorage } from './api/fech/storage'
-import React, { useState, useEffect,  } from 'react';
+import React, { useState, useEffect, useCallback  } from 'react';
 import { createContext, useContext } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
 import theme from "./theme";
-import MenusContext from './api/context/menus'
+import MenusContext, { DefaultMenu } from './api/context/menus'
 
 const drawerWidth = 240;
 
@@ -22,18 +22,10 @@ export const metadata = {
   description: 'GMOMpro DashBoard',
 }
 
-export const AppContext = createContext({
-
-});
-
 const defaultMenuData: MenuType[] = [];
 
-const defaultSetMenu: MenuType[] = [
-  { menuId: 'menu1', menuName: '메뉴1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
-  { menuId: 'menu2', menuName: '메뉴2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
-  { menuId: 'menu3', menuName: '메뉴3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
-]
-
+const DefaultMenuTemp = DefaultMenu.map(e=>e);
+const defaultSetMenu: MenuType[] = DefaultMenuTemp;
 
 export default function RootLayout({
   children,
@@ -48,6 +40,11 @@ export default function RootLayout({
   const [menus, setMenus] = useState(defaultMenuData);
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [redirectTo, setRedirectTo] = useState('/');
+  const changeMenus = useCallback(
+    (vl: MenuType[]) => {
+      setMenus(vl);
+    }, [setMenus]
+  );
 
   const toggleDrawer = (vl: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -63,7 +60,6 @@ export default function RootLayout({
 
   const toggleDrawer1 = (vl: boolean) => {
     setState(vl);
-    console.log(state);
   };
 
   const toggleFullScreen = () => {
@@ -90,8 +86,8 @@ export default function RootLayout({
   }
 
   const moveMenu = (arrow: string) => {
-    const menusTemp = menus.map(e=>e);
-    const menuDataUse = menusTemp.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+    const menusTemp = menus.map(e=>e).filter(e => e.useYn === 'Y');
+    const menuDataUse = menusTemp.find(e => e.menuId == usePathnm.replace('/', ''));
     if (menuDataUse != undefined) {
       if (document.fullscreenElement != null) {
         document.exitFullscreen()
@@ -172,9 +168,10 @@ export default function RootLayout({
   useEffect(()=>{
     const getStorageMenus = localStorage.getItem("menus");
     if(getStorageMenus != null){
+      console.log(true);
       setMenus(JSON.parse(getStorageMenus));
-      console.log(JSON.parse(getStorageMenus));
     } else {
+      console.log(false);
       setMenus(defaultSetMenu);
     }
   },[])
@@ -186,32 +183,34 @@ export default function RootLayout({
           usePathnm = menus.filter(e => e.useYn === 'Y')[0].menuId;
           router.push(menus.filter(e => e.useYn === 'Y')[0].endPoint);
         }
-        const menuDataUse = menus.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+        let menuDataUse = menus.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
         if (menuDataUse == undefined) {
-          setRedirectTo('/');
+          menuDataUse = menus.filter(e => e.useYn === 'Y')[0];
+        }
+        let sortMax = menuDataUse.sort;
+        const findSortMax = menus.filter(e => e.useYn === 'Y').find(e => e.sort > sortMax);
+        if (findSortMax == undefined) {
+          const sortMin = menus.filter(e => e.useYn === 'Y').reduce((acc, cur, idx) => { if (acc == 0) { return cur.sort } else { return acc > cur.sort ? cur.sort : acc } }, 0);
+          const findData = menus.filter(e => e.useYn === 'Y').find(e => e.sort == sortMin);
+          setRedirectTo(findData == undefined ? '/' : findData.endPoint);
+          setSecondsRemaining(findData == undefined ? 0 : findData.setTimer);
         } else {
-          let sortMax = menuDataUse.sort;
-          const findSortMax = menus.filter(e => e.useYn === 'Y').find(e => e.sort > sortMax);
-          if (findSortMax == undefined) {
-            const sortMin = menus.reduce((acc, cur, idx) => { if (acc == 0) { return cur.sort } else { return acc > cur.sort ? cur.sort : acc } }, 0);
-            const findData = menus.find(e => e.sort == sortMin);
-            setRedirectTo(findData == undefined ? '/' : findData.endPoint);
-            setSecondsRemaining(findData == undefined ? 0 : findData.setTimer);
-          } else {
-            setRedirectTo(findSortMax.endPoint);
-            setSecondsRemaining(findSortMax.setTimer);
-          }
+          setRedirectTo(findSortMax.endPoint);
+          setSecondsRemaining(findSortMax.setTimer);
         }
       }
-      //console.log(`${secondsRemaining}      ${redirectTo}`);
+      console.log(`${secondsRemaining}      ${redirectTo}`);
 
       const timer = setTimeout(() => {
         setSecondsRemaining((prevSecondsRemaining) => prevSecondsRemaining - 1);
         if (secondsRemaining === 2) router.push(redirectTo);
+        if (secondsRemaining < 0){
+          router.push(redirectTo);
+        }
       }, 1000);
 
       return () => {
-        //console.log('end');
+        console.log('end');
         clearInterval(timer);
       };
     }
@@ -222,7 +221,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Box sx={{ display: 'flex' }}>
-          <MenusContext.Provider value={menus}>
+          <MenusContext.Provider value={{menus, changeMenus}}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} toggleMode={toggleMode}

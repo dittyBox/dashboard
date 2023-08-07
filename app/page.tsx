@@ -4,22 +4,46 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Cards from './api/component/card/page'
 import * as React from 'react';
 import { useContext, useState, useEffect } from 'react';
-import MenusContext from '@/app/api/context/menus'
+import MenusContext, { DefaultMenu } from '@/app/api/context/menus'
 import Button from '@mui/material/Button';
-
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function Home() {
-  const menus = useContext(MenusContext);
+  let menus = useContext(MenusContext);
 
-  const [useMenu, setUseMenu] = useState(menus);
+  const router = useRouter();
 
-  const changeMenuHandler = () =>{
+  const [useMenu, setUseMenu] = useState<MenuType[]>([]);
 
+  const changeMenuHandler = (vl: MenuType[]) =>{
+    menus.menus = vl;
+  }
+
+  const resetHandler = () => {
+    const DefaultMenuTemp = DefaultMenu.map(e=>e);
+    localStorage.setItem("menus",JSON.stringify(DefaultMenuTemp));
+    menus.menus = DefaultMenuTemp;
+    menus.changeMenus(DefaultMenuTemp);
+    setUseMenu(DefaultMenuTemp);
+    router.refresh();
+  }
+
+  const saveHandler = () => {
+    const checkUse = menus.menus.find(e=>e.useYn=='Y');
+    if(checkUse == undefined){
+      alert('사용페이지가 한건도 없습니다.');
+      return;
+    }
+    localStorage.setItem("menus",JSON.stringify(menus.menus));
+    menus.changeMenus(menus.menus);
+    setUseMenu(menus.menus);
+    
+    router.refresh();
   }
 
   useEffect(()=>{
-    console.log(menus)
-  }, [menus])
+    setUseMenu(menus.menus);
+  }, [useMenu])
 
   return (
     <Box component="main" sx={{ marginTop: "50px" }}>
@@ -27,20 +51,21 @@ export default function Home() {
         justifyContent="center"
         alignItems="center" >
         {
-          menus.map(menu => {
+          useMenu.map(menu => {
+            console.log(menu.setTimer);
             return (
               <Grid key={menu.menuId} sx={{ width: "500px" }}>
-                <Cards config={menu} />
+                <Cards config={menu} changeMenuHandler={changeMenuHandler} />
               </Grid>
             )
           })
         }
         <Grid container columnSpacing={1} sx={{ width: "500px", marginTop: "2px" }}>
           <Grid container xs={6} justifyContent="start">
-            <Button variant="contained">Reset</Button>
+            <Button variant="contained" onClick={resetHandler}>Reset</Button>
           </Grid>
           <Grid container xs={6} justifyContent="end">
-            <Button variant="contained">저장</Button>
+            <Button variant="contained" onClick={saveHandler}>저장</Button>
           </Grid>
         </Grid>
       </Grid>

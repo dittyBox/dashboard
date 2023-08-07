@@ -39,7 +39,7 @@ export default function Nav(props: Props) {
       <Divider />
       <List>
         {
-          menus.map(menu => {
+          menus.menus.map(menu => {
             return (
               <ListItem key={menu.menuId} disablePadding >
                 <ListItemButton component="a" onClick={

@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
@@ -23,12 +23,41 @@ export default function Cards(props: any) {
   const menus = useContext(MenusContext);
 
   const config = props.config;
+  const menuId = config.menuId;
 
-  
+  const [checked, setChecked] = useState(config.useYn == 'Y' ? true : false);
+  const [timer, setTimer] = useState(config.setTimer);
 
-  const rightClickHandlr = () => {
-
+  const timerClickHandlr = (vl: string) => {
+    const menu = menus.menus.find(e=>e.menuId == menuId);
+    if(menu != undefined){
+      if(vl == 'R'){
+        setTimer(++menu.setTimer);
+      } else {
+        setTimer(--menu.setTimer);
+      }
+      props.changeMenuHandler(menus.menus);
+    }
   }
+
+  const changeCheckHandler = () => {
+    const menu = menus.menus.find(e=>e.menuId == menuId);
+    if(menu != undefined){
+      if(!checked){
+        menu.useYn = 'Y';
+        setChecked(true);
+      } else {
+        menu.useYn = 'N';
+        setChecked(false);
+      }
+      props.changeMenuHandler(menus.menus);
+    }
+  }
+
+  useEffect(()=>{
+    setTimer(config.setTimer);
+    console.log(`asdasdasd    ${config.setTimer}`);
+  }, [props])
 
   return (
     <Card ref={ref}>
@@ -41,15 +70,15 @@ export default function Cards(props: any) {
       </CardActionArea>
       <CardActions>
         <FormGroup>
-          <FormControlLabel control={<Checkbox defaultChecked />} label={<Typography color='primary'>사용유무</Typography>} />
+          <FormControlLabel control={<Checkbox checked={checked} onChange={changeCheckHandler} />} label={<Typography color='primary'>사용유무</Typography>} />
         </FormGroup>
-        <IconButton color="primary" aria-label="add an alarm">
+        <IconButton onClick={(event)=>{timerClickHandlr('L')}} color="primary" aria-label="add an alarm">
           <RemoveCircleIcon />
         </IconButton>
           <Typography color="primary">
-            {config.setTimer}
+            {timer}
           </Typography>
-        <IconButton onClick={rightClickHandlr} color="primary" aria-label="add an alarm">
+        <IconButton onClick={(event)=>{timerClickHandlr('R')}} color="primary" aria-label="add an alarm">
           <AddCircleIcon />
         </IconButton>
         <Typography color="primary">
