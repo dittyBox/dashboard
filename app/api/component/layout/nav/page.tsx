@@ -13,6 +13,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MenusContext from '@/app/api/context/menus'
 import { useContext } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
   /**
@@ -26,6 +27,11 @@ interface Props {
 
 export default function Nav(props: Props) {
   const menus = useContext(MenusContext);
+  const router = useRouter();
+
+  const movePages = (routerUrl:string) =>{
+    router.push(routerUrl);
+  }
 
   return (
     <Box sx={{ backgroundColor: "#343a40", height: "100%" }}>
@@ -35,8 +41,12 @@ export default function Nav(props: Props) {
         {
           menus.map(menu => {
             return (
-              <ListItem key={menu.menuId} disablePadding>
-                <ListItemButton component="a" href={menu.menuId}>
+              <ListItem key={menu.menuId} disablePadding >
+                <ListItemButton component="a" onClick={
+                  (event) => {
+                    movePages(menu.menuId);
+                  }
+                }>
                   <ListItemIcon sx={{ color: "text.primary" }}>
                     <InboxIcon />
                   </ListItemIcon>
@@ -50,7 +60,11 @@ export default function Nav(props: Props) {
       <Divider />
       <List>
         <ListItem key="설정" disablePadding>
-          <ListItemButton component="a" href="/">
+          <ListItemButton component="a" onClick={
+                  (event) => {
+                    movePages('/');
+                  }
+                }>
             <ListItemIcon sx={{ color: "text.primary" }}>
               <InboxIcon />
             </ListItemIcon>

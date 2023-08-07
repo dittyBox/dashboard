@@ -16,17 +16,23 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import IconButton from '@mui/material/IconButton';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import TextField from '@mui/material/TextField';
+import MenusContext from '@/app/api/context/menus'
 
 export default function Cards(props: any) {
-
   const ref = useRef(null);
+
+  const config = props.config;
+
+  const rightClickHandlr = () => {
+    
+  }
 
   return (
     <Card ref={ref}>
       <CardActionArea>
         <CardContent sx={{ height: "30px" }}>
           <Typography color="primary">
-            {props.config.name}
+            {config.menuName}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -37,8 +43,10 @@ export default function Cards(props: any) {
         <IconButton color="primary" aria-label="add an alarm">
           <RemoveCircleIcon />
         </IconButton>
-        
-        <IconButton color="primary" aria-label="add an alarm">
+          <Typography color="primary">
+            {config.setTimer}
+          </Typography>
+        <IconButton onClick={rightClickHandlr} color="primary" aria-label="add an alarm">
           <AddCircleIcon />
         </IconButton>
         <Typography color="primary">

@@ -15,6 +15,8 @@ import MenusContext from './api/context/menus'
 
 const drawerWidth = 240;
 
+let chMode = true;
+
 export const metadata = {
   title: 'MOMpro DashBoard',
   description: 'GMOMpro DashBoard',
@@ -24,10 +26,12 @@ export const AppContext = createContext({
 
 });
 
-const defaultMenuData: MenuType[] = [
-  { menuId: 'menu1', menuName: 'menu1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
-  { menuId: 'menu2', menuName: 'menu2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
-  { menuId: 'menu3', menuName: 'menu3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
+const defaultMenuData: MenuType[] = [];
+
+const defaultSetMenu: MenuType[] = [
+  { menuId: 'menu1', menuName: '메뉴1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
+  { menuId: 'menu2', menuName: '메뉴2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
+  { menuId: 'menu3', menuName: '메뉴3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
 ]
 
 
@@ -87,7 +91,7 @@ export default function RootLayout({
   }
 
   const moveMenu = (arrow: string) => {
-    const menuDataUse = menuData.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+    const menuDataUse = menus.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
     if (menuDataUse != undefined) {
       if (document.fullscreenElement != null) {
         document.exitFullscreen()
@@ -95,7 +99,7 @@ export default function RootLayout({
       if (arrow == 'L') {
         setSecondsRemaining(0);
         setState(true);
-        const sortData = menuData.sort((a, b) => {
+        const sortData = menus.sort((a, b) => {
           if (a.sort > b.sort) {
             return -1;
           } else if (a.sort === b.sort) {
@@ -104,7 +108,7 @@ export default function RootLayout({
         }).find(e => e.sort < menuDataUse.sort)
 
         if (sortData == undefined) {
-          const MaxData = menuData.sort((a, b) => {
+          const MaxData = menus.sort((a, b) => {
             if (a.sort > b.sort) {
               return -1;
             } else if (a.sort === b.sort) {
@@ -119,7 +123,7 @@ export default function RootLayout({
         setSecondsRemaining(0);
         setState(true);
 
-        const sortData = menuData.sort((a, b) => {
+        const sortData = menus.sort((a, b) => {
           if (a.sort > b.sort) {
             return 1;
           } else if (a.sort === b.sort) {
@@ -128,7 +132,7 @@ export default function RootLayout({
         }).find(e => e.sort > menuDataUse.sort)
 
         if (sortData == undefined) {
-          const MaxData = menuData.sort((a, b) => {
+          const MaxData = menus.sort((a, b) => {
             if (a.sort > b.sort) {
               return 1;
             } else if (a.sort === b.sort) {
@@ -142,14 +146,40 @@ export default function RootLayout({
       } else {
         return;
       }
+    } else if(menus.length > 0) {
+      if (arrow == 'L') {
+        const MaxData = menus.sort((a, b) => {
+          if (a.sort > b.sort) {
+            return -1;
+          } else if (a.sort === b.sort) {
+            return 0;
+          } else return 1;
+        })[0]
+        router.push(`/${MaxData.menuId}`);
+      } else if (arrow == 'R') {
+        const MaxData = menus.sort((a, b) => {
+          if (a.sort > b.sort) {
+            return 1;
+          } else if (a.sort === b.sort) {
+            return 0;
+          } else return -1;
+        })[0]
+        router.push(`/${MaxData.menuId}`);
+      }
     }
   }
 
   useEffect(()=>{
-    const getStorageMenus = localStorage.getItem("menus");
-    if(getStorageMenus != null){
-      setMenus(JSON.parse(getStorageMenus));
-      console.log(JSON.parse(getStorageMenus));
+    if(chMode){
+      console.log(chMode)
+      const getStorageMenus = localStorage.getItem("menus");
+      if(getStorageMenus != null){
+        setMenus(JSON.parse(getStorageMenus));
+        console.log(JSON.parse(getStorageMenus));
+      } else {
+        setMenus(defaultSetMenu);
+      }
+      chMode = false;
     }
   },[])
 
