@@ -4,12 +4,14 @@ import AppBarComp from './api/component/layout/appbar/page'
 import Nav from './api/component/layout/nav/page'
 import Box from '@mui/material/Box';
 import { getMenuStorage, setMenuStorage } from './api/fech/storage'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,  } from 'react';
+import { createContext, useContext } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
 import theme from "./theme";
+import MenusContext from './api/context/menus'
 
 const drawerWidth = 240;
 
@@ -18,11 +20,16 @@ export const metadata = {
   description: 'GMOMpro DashBoard',
 }
 
-const menuData: MenuType[] = [
-  { menuId: 'menu1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
-  { menuId: 'menu2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
-  { menuId: 'menu3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
+export const AppContext = createContext({
+
+});
+
+const defaultMenuData: MenuType[] = [
+  { menuId: 'menu1', menuName: 'menu1', setTimer: 10, useYn: 'Y', endPoint: '/menu1?mode=play', sort: 1 },
+  { menuId: 'menu2', menuName: 'menu2', setTimer: 10, useYn: 'Y', endPoint: '/menu2?mode=play', sort: 2 },
+  { menuId: 'menu3', menuName: 'menu3', setTimer: 10, useYn: 'Y', endPoint: '/menu3?mode=play', sort: 3 },
 ]
+
 
 export default function RootLayout({
   children,
@@ -34,7 +41,7 @@ export default function RootLayout({
   let usePathnm = usePathname();
   let mode = searchParams.get("mode") == null ? true : false;
   const [state, setState] = useState(mode);
-
+  const [menus, setMenus] = useState(defaultMenuData);
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [redirectTo, setRedirectTo] = useState('/');
 
@@ -54,7 +61,7 @@ export default function RootLayout({
     setState(vl);
     console.log(state);
   };
-  
+
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen()
@@ -68,7 +75,7 @@ export default function RootLayout({
   const toggleMode = (vl: boolean) => {
     console.log(vl);
     toggleFullScreen();
-    if(vl){
+    if (vl) {
       setSecondsRemaining(0);
       setState(false);
       router.push(`${usePathnm}?mode=play`);
@@ -88,22 +95,20 @@ export default function RootLayout({
       if (arrow == 'L') {
         setSecondsRemaining(0);
         setState(true);
-        const sortData = menuData.sort((a,b)=>
-        {
-          if(a.sort > b.sort){
-            return -1; 
-          } else if(a.sort === b.sort) {
-            return 0; 
+        const sortData = menuData.sort((a, b) => {
+          if (a.sort > b.sort) {
+            return -1;
+          } else if (a.sort === b.sort) {
+            return 0;
           } else return 1;
-        }).find(e=>e.sort<menuDataUse.sort)
+        }).find(e => e.sort < menuDataUse.sort)
 
-        if(sortData == undefined){
-          const MaxData = menuData.sort((a,b)=>
-          {
-            if(a.sort > b.sort){
-              return -1; 
-            } else if(a.sort === b.sort) {
-              return 0; 
+        if (sortData == undefined) {
+          const MaxData = menuData.sort((a, b) => {
+            if (a.sort > b.sort) {
+              return -1;
+            } else if (a.sort === b.sort) {
+              return 0;
             } else return 1;
           })[0]
           router.push(`/${MaxData.menuId}`);
@@ -114,22 +119,20 @@ export default function RootLayout({
         setSecondsRemaining(0);
         setState(true);
 
-        const sortData = menuData.sort((a,b)=>
-        {
-          if(a.sort > b.sort){
-            return 1; 
-          } else if(a.sort === b.sort) {
-            return 0; 
+        const sortData = menuData.sort((a, b) => {
+          if (a.sort > b.sort) {
+            return 1;
+          } else if (a.sort === b.sort) {
+            return 0;
           } else return -1;
-        }).find(e=>e.sort > menuDataUse.sort)
+        }).find(e => e.sort > menuDataUse.sort)
 
-        if(sortData == undefined){
-          const MaxData = menuData.sort((a,b)=>
-          {
-            if(a.sort > b.sort){
-              return 1; 
-            } else if(a.sort === b.sort) {
-              return 0; 
+        if (sortData == undefined) {
+          const MaxData = menuData.sort((a, b) => {
+            if (a.sort > b.sort) {
+              return 1;
+            } else if (a.sort === b.sort) {
+              return 0;
             } else return -1;
           })[0]
           router.push(`/${MaxData.menuId}`);
@@ -142,22 +145,30 @@ export default function RootLayout({
     }
   }
 
+  useEffect(()=>{
+    const getStorageMenus = localStorage.getItem("menus");
+    if(getStorageMenus != null){
+      setMenus(JSON.parse(getStorageMenus));
+      console.log(JSON.parse(getStorageMenus));
+    }
+  },[])
+
   useEffect(() => {
     if (!mode) {
       if (secondsRemaining == 0) {
-        if(usePathnm == '/'){
-          usePathnm = menuData.filter(e => e.useYn === 'Y')[0].menuId;
-          router.push(menuData.filter(e => e.useYn === 'Y')[0].endPoint);
+        if (usePathnm == '/') {
+          usePathnm = menus.filter(e => e.useYn === 'Y')[0].menuId;
+          router.push(menus.filter(e => e.useYn === 'Y')[0].endPoint);
         }
-        const menuDataUse = menuData.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+        const menuDataUse = menus.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
         if (menuDataUse == undefined) {
           setRedirectTo('/');
         } else {
           let sortMax = menuDataUse.sort;
-          const findSortMax = menuData.filter(e => e.useYn === 'Y').find(e => e.sort > sortMax);
+          const findSortMax = menus.filter(e => e.useYn === 'Y').find(e => e.sort > sortMax);
           if (findSortMax == undefined) {
-            const sortMin = menuData.reduce((acc, cur, idx) => { if (acc == 0) { return cur.sort } else { return acc > cur.sort ? cur.sort : acc } }, 0);
-            const findData = menuData.find(e => e.sort == sortMin);
+            const sortMin = menus.reduce((acc, cur, idx) => { if (acc == 0) { return cur.sort } else { return acc > cur.sort ? cur.sort : acc } }, 0);
+            const findData = menus.find(e => e.sort == sortMin);
             setRedirectTo(findData == undefined ? '/' : findData.endPoint);
             setSecondsRemaining(findData == undefined ? 0 : findData.setTimer);
           } else {
@@ -166,7 +177,7 @@ export default function RootLayout({
           }
         }
       }
-      console.log(`${secondsRemaining}      ${redirectTo}`);
+      //console.log(`${secondsRemaining}      ${redirectTo}`);
 
       const timer = setTimeout(() => {
         setSecondsRemaining((prevSecondsRemaining) => prevSecondsRemaining - 1);
@@ -174,7 +185,7 @@ export default function RootLayout({
       }, 1000);
 
       return () => {
-        console.log('end');
+        //console.log('end');
         clearInterval(timer);
       };
     }
@@ -185,46 +196,48 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Box sx={{ display: 'flex' }}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} toggleMode={toggleMode}
-            moveMenu={moveMenu} />
-            <Drawer
-              sx={{
-                width: drawerWidth,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
+          <MenusContext.Provider value={menus}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <AppBarComp drawerBool={state} toggleFn={toggleDrawer1} mode={mode} toggleMode={toggleMode}
+                moveMenu={moveMenu} />
+              <Drawer
+                sx={{
                   width: drawerWidth,
-                  boxSizing: 'border-box',
-                },
-              }}
-              anchor="left"
-              variant="persistent"
-              open={state}
-              onClose={toggleDrawer(state)}
-            >
-              <Nav drawerBool={state} toggleFn={toggleDrawer1} />
-            </Drawer>
-            <Box
-              sx={{
-                flexGrow: 1,
-                padding: (theme) => theme.spacing(3),
-                transition: (theme) => theme.transitions.create('margin', {
-                  easing: theme.transitions.easing.sharp,
-                  duration: theme.transitions.duration.leavingScreen,
-                }),
-                marginLeft: `-${drawerWidth}px`,
-                ...(state && {
+                  flexShrink: 0,
+                  '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                    boxSizing: 'border-box',
+                  },
+                }}
+                anchor="left"
+                variant="persistent"
+                open={state}
+                onClose={toggleDrawer(state)}
+              >
+                <Nav drawerBool={state} toggleFn={toggleDrawer1} />
+              </Drawer>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  padding: (theme) => theme.spacing(3),
                   transition: (theme) => theme.transitions.create('margin', {
-                    easing: theme.transitions.easing.easeOut,
-                    duration: theme.transitions.duration.enteringScreen,
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.leavingScreen,
                   }),
-                  marginLeft: 0,
-                }), height: "100%"
-              }}>
-              {children}
-            </Box>
-          </ThemeProvider>
+                  marginLeft: `-${drawerWidth}px`,
+                  ...(state && {
+                    transition: (theme) => theme.transitions.create('margin', {
+                      easing: theme.transitions.easing.easeOut,
+                      duration: theme.transitions.duration.enteringScreen,
+                    }),
+                    marginLeft: 0,
+                  }), height: "100%"
+                }}>
+                {children}
+              </Box>
+            </ThemeProvider>
+          </MenusContext.Provider>
         </Box>
       </body>
     </html>

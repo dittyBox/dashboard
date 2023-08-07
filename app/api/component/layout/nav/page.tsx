@@ -11,6 +11,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MenusContext from '@/app/api/context/menus'
+import { useContext } from 'react';
 
 interface Props {
   /**
@@ -23,35 +25,27 @@ interface Props {
 }
 
 export default function Nav(props: Props) {
+  const menus = useContext(MenusContext);
+
   return (
     <Box sx={{ backgroundColor: "#343a40", height: "100%" }}>
       <Toolbar />
       <Divider />
       <List>
-        <ListItem key="메뉴1" disablePadding>
-          <ListItemButton component="a" href="menu1">
-            <ListItemIcon sx={{ color: "text.primary" }}>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="메뉴1" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="메뉴2" disablePadding>
-          <ListItemButton component="a" href="menu2">
-            <ListItemIcon sx={{ color: "text.primary" }}>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="메뉴2" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="메뉴3" disablePadding>
-          <ListItemButton component="a" href="menu3">
-            <ListItemIcon sx={{ color: "text.primary" }}>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="메뉴3" />
-          </ListItemButton>
-        </ListItem>
+        {
+          menus.map(menu => {
+            return (
+              <ListItem key={menu.menuId} disablePadding>
+                <ListItemButton component="a" href={menu.menuId}>
+                  <ListItemIcon sx={{ color: "text.primary" }}>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={menu.menuName} />
+                </ListItemButton>
+              </ListItem>
+            )
+          })
+        }
       </List>
       <Divider />
       <List>
