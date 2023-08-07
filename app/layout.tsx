@@ -77,7 +77,6 @@ export default function RootLayout({
   }
 
   const toggleMode = (vl: boolean) => {
-    console.log(vl);
     toggleFullScreen();
     if (vl) {
       setSecondsRemaining(0);
@@ -91,7 +90,8 @@ export default function RootLayout({
   }
 
   const moveMenu = (arrow: string) => {
-    const menuDataUse = menus.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+    const menusTemp = menus.map(e=>e);
+    const menuDataUse = menusTemp.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
     if (menuDataUse != undefined) {
       if (document.fullscreenElement != null) {
         document.exitFullscreen()
@@ -99,7 +99,7 @@ export default function RootLayout({
       if (arrow == 'L') {
         setSecondsRemaining(0);
         setState(true);
-        const sortData = menus.sort((a, b) => {
+        const sortData = menusTemp.sort((a, b) => {
           if (a.sort > b.sort) {
             return -1;
           } else if (a.sort === b.sort) {
@@ -108,7 +108,7 @@ export default function RootLayout({
         }).find(e => e.sort < menuDataUse.sort)
 
         if (sortData == undefined) {
-          const MaxData = menus.sort((a, b) => {
+          const MaxData = menusTemp.sort((a, b) => {
             if (a.sort > b.sort) {
               return -1;
             } else if (a.sort === b.sort) {
@@ -123,7 +123,7 @@ export default function RootLayout({
         setSecondsRemaining(0);
         setState(true);
 
-        const sortData = menus.sort((a, b) => {
+        const sortData = menusTemp.sort((a, b) => {
           if (a.sort > b.sort) {
             return 1;
           } else if (a.sort === b.sort) {
@@ -132,7 +132,7 @@ export default function RootLayout({
         }).find(e => e.sort > menuDataUse.sort)
 
         if (sortData == undefined) {
-          const MaxData = menus.sort((a, b) => {
+          const MaxData = menusTemp.sort((a, b) => {
             if (a.sort > b.sort) {
               return 1;
             } else if (a.sort === b.sort) {
@@ -146,9 +146,9 @@ export default function RootLayout({
       } else {
         return;
       }
-    } else if(menus.length > 0) {
+    } else if(menusTemp.length > 0) {
       if (arrow == 'L') {
-        const MaxData = menus.sort((a, b) => {
+        const MaxData = menusTemp.sort((a, b) => {
           if (a.sort > b.sort) {
             return -1;
           } else if (a.sort === b.sort) {
@@ -157,7 +157,7 @@ export default function RootLayout({
         })[0]
         router.push(`/${MaxData.menuId}`);
       } else if (arrow == 'R') {
-        const MaxData = menus.sort((a, b) => {
+        const MaxData = menusTemp.sort((a, b) => {
           if (a.sort > b.sort) {
             return 1;
           } else if (a.sort === b.sort) {
@@ -170,16 +170,12 @@ export default function RootLayout({
   }
 
   useEffect(()=>{
-    if(chMode){
-      console.log(chMode)
-      const getStorageMenus = localStorage.getItem("menus");
-      if(getStorageMenus != null){
-        setMenus(JSON.parse(getStorageMenus));
-        console.log(JSON.parse(getStorageMenus));
-      } else {
-        setMenus(defaultSetMenu);
-      }
-      chMode = false;
+    const getStorageMenus = localStorage.getItem("menus");
+    if(getStorageMenus != null){
+      setMenus(JSON.parse(getStorageMenus));
+      console.log(JSON.parse(getStorageMenus));
+    } else {
+      setMenus(defaultSetMenu);
     }
   },[])
 

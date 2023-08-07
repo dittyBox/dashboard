@@ -1,5 +1,5 @@
 "use client"
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
@@ -20,11 +20,14 @@ import MenusContext from '@/app/api/context/menus'
 
 export default function Cards(props: any) {
   const ref = useRef(null);
+  const menus = useContext(MenusContext);
 
   const config = props.config;
 
+  
+
   const rightClickHandlr = () => {
-    
+
   }
 
   return (
