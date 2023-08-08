@@ -39,7 +39,13 @@ export default function Nav(props: Props) {
       <Divider />
       <List>
         {
-          menus.menus.map(menu => {
+          menus.menus.sort((a, b) => {
+            if (a.sort > b.sort) {
+              return 1;
+            } else if (a.sort === b.sort) {
+              return 0;
+            } else return -1;
+          }).map(menu => {
             return (
               <ListItem key={menu.menuId} disablePadding >
                 <ListItemButton component="a" onClick={

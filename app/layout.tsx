@@ -10,10 +10,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import MenusContext, { DefaultMenu } from './api/context/menus'
+import * as _ from "lodash";
 
 const drawerWidth = 240;
-
-let chMode = true;
 
 export const metadata = {
   title: 'MOMpro DashBoard',
@@ -22,7 +21,7 @@ export const metadata = {
 
 const defaultMenuData: MenuType[] = [];
 
-const DefaultMenuTemp = DefaultMenu.map(e=>e);
+const DefaultMenuTemp = _.cloneDeep(DefaultMenu);
 const defaultSetMenu: MenuType[] = DefaultMenuTemp;
 
 export default function RootLayout({
@@ -84,7 +83,7 @@ export default function RootLayout({
   }
 
   const moveMenu = (arrow: string) => {
-    const menusTemp = menus.map(e=>e).filter(e => e.useYn === 'Y');
+    const menusTemp = _.cloneDeep(menus).filter(e => e.useYn === 'Y');
     const menuDataUse = menusTemp.find(e => e.menuId == usePathnm.replace('/', ''));
     if (menuDataUse != undefined) {
       if (document.fullscreenElement != null) {
@@ -94,18 +93,18 @@ export default function RootLayout({
         setSecondsRemaining(0);
         setState(true);
         const sortData = menusTemp.sort((a, b) => {
-          if (a.sort > b.sort) {
+          if (a.playSort > b.playSort) {
             return -1;
-          } else if (a.sort === b.sort) {
+          } else if (a.playSort === b.playSort) {
             return 0;
           } else return 1;
-        }).find(e => e.sort < menuDataUse.sort)
+        }).find(e => e.playSort < menuDataUse.playSort)
 
         if (sortData == undefined) {
           const MaxData = menusTemp.sort((a, b) => {
-            if (a.sort > b.sort) {
+            if (a.playSort > b.playSort) {
               return -1;
-            } else if (a.sort === b.sort) {
+            } else if (a.playSort === b.playSort) {
               return 0;
             } else return 1;
           })[0]
@@ -118,18 +117,18 @@ export default function RootLayout({
         setState(true);
 
         const sortData = menusTemp.sort((a, b) => {
-          if (a.sort > b.sort) {
+          if (a.playSort > b.playSort) {
             return 1;
-          } else if (a.sort === b.sort) {
+          } else if (a.playSort === b.playSort) {
             return 0;
           } else return -1;
-        }).find(e => e.sort > menuDataUse.sort)
+        }).find(e => e.playSort > menuDataUse.playSort)
 
         if (sortData == undefined) {
           const MaxData = menusTemp.sort((a, b) => {
-            if (a.sort > b.sort) {
+            if (a.playSort > b.playSort) {
               return 1;
-            } else if (a.sort === b.sort) {
+            } else if (a.playSort === b.playSort) {
               return 0;
             } else return -1;
           })[0]
@@ -143,18 +142,18 @@ export default function RootLayout({
     } else if(menusTemp.length > 0) {
       if (arrow == 'L') {
         const MaxData = menusTemp.sort((a, b) => {
-          if (a.sort > b.sort) {
+          if (a.playSort > b.playSort) {
             return -1;
-          } else if (a.sort === b.sort) {
+          } else if (a.playSort === b.playSort) {
             return 0;
           } else return 1;
         })[0]
         router.push(`/${MaxData.menuId}`);
       } else if (arrow == 'R') {
         const MaxData = menusTemp.sort((a, b) => {
-          if (a.sort > b.sort) {
+          if (a.playSort > b.playSort) {
             return 1;
-          } else if (a.sort === b.sort) {
+          } else if (a.playSort === b.playSort) {
             return 0;
           } else return -1;
         })[0]
@@ -175,19 +174,27 @@ export default function RootLayout({
   useEffect(() => {
     if (!mode) {
       if (secondsRemaining == 0) {
+        const menuMos = _.cloneDeep(menus).sort((a, b) => {
+          if (a.playSort > b.playSort) {
+            return 1;
+          } else if (a.playSort === b.playSort) {
+            return 0;
+          } else return -1;
+        });
         if (usePathnm == '/') {
-          usePathnm = menus.filter(e => e.useYn === 'Y')[0].menuId;
-          router.push(menus.filter(e => e.useYn === 'Y')[0].endPoint);
+          usePathnm = menuMos.filter(e => e.useYn === 'Y')[0].menuId;
+          router.push(menuMos.filter(e => e.useYn === 'Y')[0].endPoint);
         }
-        let menuDataUse = menus.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
+        let menuDataUse = menuMos.filter(e => e.useYn === 'Y').find(e => e.menuId == usePathnm.replace('/', ''));
         if (menuDataUse == undefined) {
-          menuDataUse = menus.filter(e => e.useYn === 'Y')[0];
+          menuDataUse = menuMos.filter(e => e.useYn === 'Y')[0];
         }
-        let sortMax = menuDataUse.sort;
-        const findSortMax = menus.filter(e => e.useYn === 'Y').find(e => e.sort > sortMax);
+        let sortMax = menuDataUse.playSort;
+        const findSortMax = menuMos.filter(e => e.useYn === 'Y').find(e => e.playSort > sortMax);
+        
         if (findSortMax == undefined) {
-          const sortMin = menus.filter(e => e.useYn === 'Y').reduce((acc, cur, idx) => { if (acc == 0) { return cur.sort } else { return acc > cur.sort ? cur.sort : acc } }, 0);
-          const findData = menus.filter(e => e.useYn === 'Y').find(e => e.sort == sortMin);
+          const sortMin = menuMos.filter(e => e.useYn === 'Y').reduce((acc, cur, idx) => { if (acc == 0) { return cur.playSort } else { return acc > cur.playSort ? cur.playSort : acc } }, 0);
+          const findData = menuMos.filter(e => e.useYn === 'Y').find(e => e.playSort == sortMin);
           setRedirectTo(findData == undefined ? '/' : findData.endPoint);
           setSecondsRemaining(findData == undefined ? 0 : findData.setTimer);
         } else {
@@ -195,7 +202,6 @@ export default function RootLayout({
           setSecondsRemaining(findSortMax.setTimer);
         }
       }
-
       const timer = setTimeout(() => {
         setSecondsRemaining((prevSecondsRemaining) => prevSecondsRemaining - 1);
         if (secondsRemaining === 2) router.push(redirectTo);

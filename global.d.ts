@@ -6,5 +6,11 @@ export declare global {
     useYn: string;
     endPoint: string;
     sort: number;
+    playSort: number;
   };
+  interface dragItem {
+    type: string;
+    id:string;
+    index: number;
+  }
 }
