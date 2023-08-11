@@ -1,6 +1,4 @@
 import * as React from 'react';
-import NextLink from 'next/link';
-import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,11 +7,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MenusContext from '@/app/api/context/menus'
 import { useContext } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
+import SpeakerNotesOutlinedIcon from '@mui/icons-material/SpeakerNotesOutlined';
+import BuildCircleOutlinedIcon from '@mui/icons-material/BuildCircleOutlined';
 
 interface Props {
   /**
@@ -35,8 +35,11 @@ export default function Nav(props: Props) {
 
   return (
     <Box sx={{ backgroundColor: "#343a40", height: "100%" }}>
-      <Toolbar />
-      <Divider />
+      <Typography variant="h6" color="inherit" component="div" 
+      style={{ color: "text.secondary", height:"45px", textAlign:"center", marginTop: "10px" }}>
+        MOMpro DashBoard
+      </Typography>
+      <Divider sx={{backgroundColor:"text.secondary"}} />
       <List>
         {
           menus.menus.sort((a, b) => {
@@ -54,7 +57,7 @@ export default function Nav(props: Props) {
                   }
                 }>
                   <ListItemIcon sx={{ color: "text.primary" }}>
-                    <InboxIcon />
+                    <SpeakerNotesOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText primary={menu.menuName} />
                 </ListItemButton>
@@ -63,7 +66,7 @@ export default function Nav(props: Props) {
           })
         }
       </List>
-      <Divider />
+      <Divider sx={{backgroundColor:"text.secondary"}} />
       <List>
         <ListItem key="설정" disablePadding>
           <ListItemButton component="a" onClick={
@@ -72,13 +75,13 @@ export default function Nav(props: Props) {
                   }
                 }>
             <ListItemIcon sx={{ color: "text.primary" }}>
-              <InboxIcon />
+              <BuildCircleOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="설정" />
           </ListItemButton>
         </ListItem>
       </List>
-      <Divider />
+      <Divider sx={{backgroundColor:"text.secondary"}} />
     </Box>
   )
 }

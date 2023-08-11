@@ -245,7 +245,6 @@ export default function RootLayout({
               <Box
                 sx={{
                   flexGrow: 1,
-                  padding: (theme) => theme.spacing(3),
                   transition: (theme) => theme.transitions.create('margin', {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.leavingScreen,
@@ -257,8 +256,8 @@ export default function RootLayout({
                       duration: theme.transitions.duration.enteringScreen,
                     }),
                     marginLeft: 0,
-                  }), height: "100%"
-                }}>
+                  })
+                }} minHeight={"calc(100vh - 50px)"}>
                 {children}
               </Box>
             </ThemeProvider>

@@ -78,7 +78,7 @@ export default function AppBarComp(props: Props) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }} style={{ color: "text.secondary" }}>
-          MOMpro DashBoard
+          
         </Typography>
 
         <IconButton

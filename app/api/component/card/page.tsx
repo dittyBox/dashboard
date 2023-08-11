@@ -42,6 +42,15 @@ export default function Cards(props: any) {
     }
   }
 
+  const timerClickMuiHandlr = (vl: string) => {
+    const menu = menus.menus.find(e => e.menuId == menuId);
+    if (menu != undefined) {
+      menu.setTimer = Number(vl);
+      setTimer(Number(vl));
+      props.changeMenuHandler(menus.menus);
+    }
+  }
+
   const changeCheckHandler = () => {
     const menu = menus.menus.find(e => e.menuId == menuId);
     if (menu != undefined) {
@@ -93,6 +102,12 @@ export default function Cards(props: any) {
 
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
+
+  const styles = (theme: any) => ({
+    multilineColor: {
+      color: 'red'
+    }
+  });
   
   useEffect(() => {
     setChecked(config.useYn == 'Y' ? true : false);
@@ -112,18 +127,34 @@ export default function Cards(props: any) {
           <FormGroup>
             <FormControlLabel control={<Checkbox checked={checked} onChange={changeCheckHandler} />} label={<Typography color='primary'>사용유무</Typography>} />
           </FormGroup>
-          <IconButton onClick={(event) => { timerClickHandlr('L') }} color="primary" aria-label="add an alarm">
+          {/* <IconButton onClick={(event) => { timerClickHandlr('L') }} color="primary" aria-label="add an alarm">
             <RemoveCircleIcon />
-          </IconButton>
-          <Typography color="primary">
+          </IconButton> */}
+          {/* <Typography color="primary">
             {timer}
-          </Typography>
-          <IconButton onClick={(event) => { timerClickHandlr('R') }} color="primary" aria-label="add an alarm">
+          </Typography> */}
+        <TextField
+          id="outlined-number"
+          label="유지시간(초)"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }} 
+          
+          defaultValue={timer}
+          onChange={(event) => {
+            timerClickMuiHandlr(event.target.value);
+          }}
+          inputProps={{ style: { color: "#000" } }}
+          sx={{width:"120px"}}
+        />
+          {/* <IconButton onClick={(event) => { timerClickHandlr('R') }} color="primary" aria-label="add an alarm">
             <AddCircleIcon />
-          </IconButton>
-          <Typography color="primary">
+          </IconButton> */}
+          {/* <Typography color="primary">
             유지시간(초)
-          </Typography>
+          </Typography> */}
         </CardActions>
       </Card>
   )
