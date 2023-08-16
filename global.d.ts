@@ -139,11 +139,17 @@ export declare global {
   };
   interface scoreGaugeProps{
     elementID: string;
-    data: number;
+    dataSet: scoreGaugeDataSet[];
     config: scoreGaugeConfig;
   };
   interface scoreGaugeConfig{
     width: number;
     height: number;
+    TEXTGAP: number;
   };
+  interface scoreGaugeDataSet{
+    name: string;
+    value: number;
+    color?: string;
+  }
 }

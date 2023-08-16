@@ -272,11 +272,18 @@ const halfScoreGauge1: halfScorefGaugeProps = {
 const scoreGaugeConfig: scoreGaugeConfig = {
   width: 200,
   height: 200,
+  TEXTGAP: 150,
 }
 
+const scoreGaugeDataSet: scoreGaugeDataSet[] = [
+  {name: 'TEST1', value: 40},
+  {name: 'TEST2', value: 60},
+  {name: 'TEST3', value: 20},
+]
+
 const scoreGaugeProps: scoreGaugeProps = {
-  elementID: "halfScoreGauge",
-  data: 40,
+  elementID: "scoreGaugeProps",
+  dataSet: scoreGaugeDataSet,
   config: scoreGaugeConfig,
 }
 
