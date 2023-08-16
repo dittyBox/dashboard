@@ -3,23 +3,26 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Guage1 from '@/app/api/component/chart/gauge'
 import FluidGauge from '@/app/api/component/chart/fluidGauge'
+import HalfGauge from '@/app/api/component/chart/halfGauge'
+import HalfScoreGauge from '@/app/api/component/chart/HalfScoreGauge'
+import ScoreGauge from '@/app/api/component/chart/scoreGauge'
 
 const valueColors: circleColorConf[] = [{
-    nm: "good",
-    max: 100,
-    min: 71,
-    color: '#c1f497'
-  }, {
-    nm: "normal",
-    max: 70,
-    min: 41,
-    color: '#fced7b'
-  }, {
-    nm: "bad",
-    max: 40,
-    min: 0,
-    color: '#f26d80'
-  }];
+  nm: "good",
+  max: 100,
+  min: 71,
+  color: '#c1f497'
+}, {
+  nm: "normal",
+  max: 70,
+  min: 41,
+  color: '#fced7b'
+}, {
+  nm: "bad",
+  max: 40,
+  min: 0,
+  color: '#f26d80'
+}];
 
 const cicleGauge1_1: circleGaugeProps = {
   elementID: "asdasd",
@@ -125,27 +128,29 @@ const fluidGauge1: fluidGaugeProps = {
   config: {
     width: 150,
     height: 150,
-    minValue: 0, 
-    maxValue: 100, 
-    circleThickness: 0.05, 
-    circleFillGap: 0.05, 
-    circleColor: "#1677c5", 
-    waveHeight: 0.05, 
-    waveCount: 2, 
-    waveRiseTime: 1000, 
-    waveAnimateTime: 2000, 
-    waveRise: true, 
-    waveHeightScaling: true, 
-    waveAnimate: true, 
-    waveColor: "#3dbdff", 
-    waveOffset: 0, 
-    textVertPosition: .25, 
-    textSize: 1, 
-    valueCountUp: true, 
-    displayPercent: true, 
-    textColor: "#045681", 
+    minValue: 0,
+    maxValue: 100,
+    circleThickness: 0.05,
+    circleFillGap: 0.05,
+    circleColor: "#1677c5",
+    waveHeight: 0.05,
+    waveCount: 2,
+    waveRiseTime: 1000,
+    waveAnimateTime: 2000,
+    waveRise: true,
+    waveHeightScaling: true,
+    waveAnimate: true,
+    waveColor: "#3dbdff",
+    waveOffset: 0,
+    textVertPosition: .25,
+    textSize: 1,
+    valueCountUp: true,
+    displayPercent: true,
+    textColor: "#045681",
     waveTextColor: "#ffffff",
-    valueColor: valueColors
+    valueColor: valueColors,
+    desc: "하단글자",
+    descColor: "#ffffff",
   }
 }
 
@@ -155,28 +160,124 @@ const fluidGauge2: fluidGaugeProps = {
   config: {
     width: 150,
     height: 150,
-    minValue: 0, 
-    maxValue: 100, 
-    circleThickness: 0.05, 
-    circleFillGap: 0.05, 
-    circleColor: "#1677c5", 
-    waveHeight: 0.05, 
-    waveCount: 2, 
-    waveRiseTime: 1000, 
-    waveAnimateTime: 2000, 
-    waveRise: true, 
-    waveHeightScaling: true, 
-    waveAnimate: true, 
-    waveColor: "#3dbdff", 
-    waveOffset: 0, 
-    textVertPosition: .25, 
-    textSize: 1, 
-    valueCountUp: true, 
-    displayPercent: true, 
-    textColor: "#045681", 
+    minValue: 0,
+    maxValue: 100,
+    circleThickness: 0.05,
+    circleFillGap: 0.05,
+    circleColor: "#1677c5",
+    waveHeight: 0.05,
+    waveCount: 2,
+    waveRiseTime: 1000,
+    waveAnimateTime: 2000,
+    waveRise: true,
+    waveHeightScaling: true,
+    waveAnimate: true,
+    waveColor: "#3dbdff",
+    waveOffset: 0,
+    textVertPosition: .25,
+    textSize: 1,
+    valueCountUp: true,
+    displayPercent: true,
+    textColor: "#045681",
     waveTextColor: "#ffffff",
-    valueColor: valueColors
+    valueColor: valueColors,
+    desc: "",
+    descColor: "",
   }
+}
+
+const halfGauge1Config: halfGaugeConfig = {
+  size: 250,
+  arcSize: 250,
+  arcThickness: 40,
+  transitionDuration: 875,
+  textColor: "#fff",
+  titleSize: 30,
+  desc: ""
+}
+
+const halfGaugeScore: halfGaugeScore[] = [
+  { value: 1, fill: "#cddc3a", sortIndex: 0, label: "LOW" },
+  { value: 1, fill: "#8bc34a", sortIndex: 1, label: "MED" },
+  { value: 1, fill: "#4caf51", sortIndex: 2, label: "HIGH", selected: true },
+  { value: 1, fill: "#1e9688", sortIndex: 3, label: "TOP" }
+]
+
+const halfGauge1: halfGaugeProps = {
+  elementID: "halfGauge1",
+  data: 20,
+  config: halfGauge1Config,
+  gaugeScore: halfGaugeScore
+}
+
+
+const halfScoreGaugeConfig: halfScoreGaugeConfig = {
+  size: 250,
+  arcSize: 250,
+  arcThickness: 40,
+  transitionDuration: 875,
+  scoreColorSet: ["#f26d80", "#fced7b", "#8bc34a"],
+  textColor: "#fff",
+  titleSize: 30,
+  prefix: "%"
+}
+
+const halfScoreGaugeScore: halfScoreGaugeScore[] = [
+  { value: 1, sortIndex: 0 },
+  { value: 1, sortIndex: 1 },
+  { value: 1, sortIndex: 2 },
+  { value: 1, sortIndex: 3 },
+  { value: 1, sortIndex: 4 },
+  { value: 1, sortIndex: 5 },
+  { value: 1, sortIndex: 6 },
+  { value: 1, sortIndex: 7 },
+  { value: 1, sortIndex: 8 },
+  { value: 1, sortIndex: 9 }
+]
+
+const halfScoreGauge: halfScorefGaugeProps = {
+  elementID: "halfScoreGauge",
+  data: 40,
+  config: halfScoreGaugeConfig,
+  gaugeScore: halfScoreGaugeScore,
+}
+
+const halfScoreGaugeConfig1: halfScoreGaugeConfig = {
+  size: 250,
+  arcSize: 250,
+  arcThickness: 40,
+  transitionDuration: 875,
+  scoreColorSet: ["#f26d80", "#fced7b", "#8bc34a"],
+  textColor: "#fff",
+  titleSize: 30,
+  prefix: "%"
+}
+
+const halfScoreGaugeScore1: halfScoreGaugeScore[] = [
+  { value: 1, sortIndex: 0 },
+  { value: 1, sortIndex: 1 },
+  { value: 1, sortIndex: 2 },
+  { value: 1, sortIndex: 3 },
+  { value: 1, sortIndex: 4 }
+]
+
+
+const halfScoreGauge1: halfScorefGaugeProps = {
+  elementID: "halfScoreGauge",
+  data: 87,
+  config: halfScoreGaugeConfig1,
+  gaugeScore: halfScoreGaugeScore1,
+}
+
+const scoreGaugeConfig: scoreGaugeConfig = {
+  width: 200,
+  height: 200,
+}
+
+const scoreGaugeProps: scoreGaugeProps = {
+  elementID: "halfScoreGauge",
+  data: 40,
+  config: scoreGaugeConfig,
 }
 
 
@@ -206,19 +307,55 @@ export default function Menu1() {
           </Grid>
         </Box>
       </Grid>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(225, 211, 55, 0.4)" }}>
+      <Grid xs={12} sx={{ backgroundColor: "rgba(225, 211, 55, 0.1)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
-          harp circle
+          <Grid container direction={"row"} minHeight="250px" spacing={1}>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Circle</Grid>
+            <Grid xs={4} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+              <ScoreGauge scoreGaugeProps={scoreGaugeProps} />
+            </Grid>
+            <Grid xs={4} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+          </Grid>
         </Box>
       </Grid>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 121, 255, 0.4)" }}>
+      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 121, 255, 0.1)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
-          Line Gauge
+          <Grid container direction={"row"} minHeight="150px" spacing={1}>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Half Gauge</Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+              <HalfGauge halfGaugeProps={halfGauge1} />
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+              <HalfScoreGauge halfScorefGaugeProps={halfScoreGauge} />
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+              <HalfScoreGauge halfScorefGaugeProps={halfScoreGauge1} />
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+          </Grid>
         </Box>
       </Grid>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 69, 155, 0.4)" }}>
+      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 69, 155, 0.1)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
-          other Gauge
+          <Grid container direction={"row"} minHeight="150px" spacing={1}>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Line Gauge</Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            </Grid>
+          </Grid>
         </Box>
       </Grid>
     </Grid>

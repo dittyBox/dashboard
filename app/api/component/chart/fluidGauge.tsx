@@ -6,6 +6,19 @@ import * as _ from "lodash";
 interface Props {
   window?: () => Window;
   fluidGaugeProps: fluidGaugeProps;
+  waveHeightScale? : d3.ScaleLinear<number, number, never>;
+  percentText? : string;
+  fillCircleRadius? : number;
+  fillCircleMargin? : number;
+  waveClipWidth? : number;
+  waveAnimateScale? : d3.ScaleLinear<number, number, never>;
+  text1? : any;
+  clipArea? : d3.Area<[number, number]>;
+  waveGroup? : d3.Selection<SVGClipPathElement, unknown, null, undefined>;
+  wave? : any;
+  text2? : any;
+  waveGroupXPosition? : number;
+  animateWave? : any;
 }
 
 export default function FluidGauge(props: Props) {
@@ -24,15 +37,29 @@ export default function FluidGauge(props: Props) {
     setSvgHeight(config.height);
     setData(props.fluidGaugeProps.data);
     
+    const baseColor = (vl: circleColorConf[], defaultVl: number) => {
+      let returnColor: string = '#fff';
+      vl.forEach(el=>{
+        if(defaultVl <= el.max && defaultVl >= el.min){
+          returnColor = el.color;
+        }
+      })
+      return returnColor;
+    };
+
     const svg = d3.select(svgRef.current);
 
+    const TEXTGAP: number = config.desc == '' ? 0 : 16;
+
+    svg.selectAll("g").remove();
 
     const thi = _.cloneDeep(props);
     svg.node().svg = thi;
 
-    var radius = Math.min(parseInt(svg.style("width")), parseInt(svg.style("height"))) / 2;
+    var radius = Math.min(parseInt(svg.style("width")), parseInt(svg.style("height"))) / 2 - TEXTGAP;
     var locationX = parseInt(svg.style("width")) / 2 - radius;
     var locationY = parseInt(svg.style("height")) / 2 - radius;
+    var locationDescY = parseInt(svg.style("height")) - radius;
     var fillPercent = Math.max(config.minValue, Math.min(config.maxValue, datas)) / config.maxValue;
 
     var waveHeightScale;
@@ -103,8 +130,18 @@ export default function FluidGauge(props: Props) {
       .range([fillCircleMargin + fillCircleRadius * 2, (fillCircleMargin + textPixels * 0.7)])
       .domain([0, 1]);
     // center the svg within the parent svg
+    
+    svg.append("g")
+    .attr("transform", "translate(" + svgWidth / 2 + "," + (svgHeight - TEXTGAP) + ")")
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("dy", "0.5em")
+    .attr("font-size", textPixels-10 + "px")
+    .style("fill", config.descColor)
+    .text(config.desc)
+
     var gaugeGroup = svg.append("g")
-      .attr("transform", "translate(" + locationX + "," + locationY + ")");
+      .attr("transform", "translate(" + locationX + "," + (locationY - TEXTGAP) + ")")
 
     //debug
     //gaugeGroup.append("circle").attr("cx",0).attr("cy",0).attr("r",radius).attr("class","debug");
@@ -117,7 +154,7 @@ export default function FluidGauge(props: Props) {
       .innerRadius(gaugeCircleY(radius - circleThickness));
     gaugeGroup.append("path")
       .attr("d", gaugeCircleArc)
-      .style("fill", config.circleColor)
+      .style("fill", baseColor(config.valueColor,value))
       .attr("transform", "translate(" + radius + "," + radius + ")");
 
     // text where the wave does not overlap
@@ -126,7 +163,7 @@ export default function FluidGauge(props: Props) {
       .attr("class", "liquidFillGaugeText")
       .attr("text-anchor", "middle")
       .attr("font-size", textPixels + "px")
-      .style("fill", config.textColor)
+      .style("fill", baseColor(config.valueColor,value))
       .attr("transform", "translate(" + radius + "," + textRiseScaleY(config.textVertPosition) + ")");
 
     // the clipping wave area
@@ -154,7 +191,7 @@ export default function FluidGauge(props: Props) {
       .attr("cx", radius)
       .attr("cy", radius)
       .attr("r", fillCircleRadius)
-      .style("fill", config.waveColor);
+      .style("fill", baseColor(config.valueColor,value));
 
     // text where the wave does overlap.
     thi.text2 = fillCircleGroup.append("text")
@@ -169,9 +206,9 @@ export default function FluidGauge(props: Props) {
     if (config.valueCountUp) {
       var pt = thi.percentText;
       var textTween = function () {
-        var a = textStartValue;
+        var a: any = textStartValue;
         var i = d3.interpolate(a, textFinalValue);
-        return function (t) {
+        return function (t: any) {
           a = textRounder(i(t)) + pt;
           thi.text1.text(a)
           thi.text2.text(a)
@@ -221,20 +258,6 @@ export default function FluidGauge(props: Props) {
 
     }
     if (config.waveAnimate) { thi.animateWave(); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   },[props])

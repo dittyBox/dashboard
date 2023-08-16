@@ -80,6 +80,70 @@ export declare global {
     displayPercent: boolean;
     textColor: string;
     waveTextColor: string;
+    desc: string;
+    descColor: string;
     valueColor: fluidColorConf[];
-  }
+  };
+  interface halfGaugeProps {
+    elementID: string;
+    data: number;
+    config: halfGaugeConfig;
+    gaugeScore: halfGaugeScore[];
+  };
+  interface halfGaugeConfig{
+    size: number;
+    arcSize: number;
+    arcThickness: number;
+    transitionDuration: number;
+    textColor: string;
+    titleSize: number;
+    desc: string;
+  };
+  interface halfGaugeScore {
+    value: number;
+    fill: string;
+    sortIndex: number;
+    label: string;
+    selected?: boolean;
+  };
+  interface halfScorefGaugeProps {
+    elementID: string;
+    data: number;
+    config: halfScoreGaugeConfig;
+    gaugeScore: halfScoreGaugeScore[];
+  };
+  interface halfScoreGaugeConfig{
+    size: number;
+    arcSize: number;
+    arcThickness: number;
+    transitionDuration: number;
+    scoreColorSet: string[];
+    textColor: string;
+    titleSize: number;
+    prefix: string;
+  };
+  interface halfScoreGaugeScore {
+    value: number;
+    sortIndex: number;
+    fill?: string;
+    label?: string;
+    selected?: boolean;
+  };
+  interface lineGaugeProps {
+    elementID: string;
+    data: number;
+    config: lineGaugeConfig;
+  };
+  interface lineGaugeConfig{
+
+  };
+  interface scoreGaugeProps{
+    elementID: string;
+    data: number;
+    config: scoreGaugeConfig;
+  };
+  interface scoreGaugeConfig{
+    width: number;
+    height: number;
+  };
 }
