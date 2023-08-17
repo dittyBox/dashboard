@@ -276,9 +276,9 @@ const scoreGaugeConfig: scoreGaugeConfig = {
 }
 
 const scoreGaugeDataSet: scoreGaugeDataSet[] = [
-  {name: 'TEST1', value: 40},
-  {name: 'TEST2', value: 60},
-  {name: 'TEST3', value: 20},
+  {name: 'TEST001', value: 40},
+  {name: 'TEST002', value: 60},
+  {name: 'TEST003', value: 20},
 ]
 
 const scoreGaugeProps: scoreGaugeProps = {
@@ -292,7 +292,7 @@ const scoreGaugeProps: scoreGaugeProps = {
 export default function Menu1() {
   return (
     <Grid container sx={{ margin: "6px", width: "100%" }} direction={"column"} spacing={1}>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 121, 5, 0.1)" }}>
+      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 121, 5, 0)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
           <Grid container direction={"row"} minHeight="150px" spacing={1}>
             <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Circle</Grid>
@@ -314,7 +314,7 @@ export default function Menu1() {
           </Grid>
         </Box>
       </Grid>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(225, 211, 55, 0.1)" }}>
+      <Grid xs={12} sx={{ backgroundColor: "rgba(225, 211, 55, 0)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
           <Grid container direction={"row"} minHeight="250px" spacing={1}>
             <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Circle</Grid>

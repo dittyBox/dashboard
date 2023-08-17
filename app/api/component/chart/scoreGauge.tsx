@@ -37,7 +37,7 @@ export default function ScoreGauge(props: Props){
     const colorSet = d3.scaleOrdinal(d3.schemeCategory10);
 
     const vis = svg.append("g")
-      .attr("transform", "translate(" + outerRadius + "," + innerRadius + ")")
+      .attr("transform", "translate(" + svgWidth / 2 + "," + (svgHeight / 2 - 40) + ")")
       .data([datas])
 
     const arc = d3.arc()
@@ -65,8 +65,51 @@ export default function ScoreGauge(props: Props){
       .attr("text-anchor","middle")
       .attr("transform", (d)=>`translate(${arc.centroid(d)})rotate(${angle(d)})`)
       .attr("fill", (d)=>d.data.color)
-      .text((d)=>d.data.name)
+      .text((d)=>d.data.value)
 
+    arcs.append("g")
+      .append("rect")
+      .attr("transform", "translate(" + -(svgWidth / 2) + "," + (outerRadius + 10) + ")")
+      .attr("width", outerRadius * 2)
+      .attr("height", (svgHeight - outerRadius - 40))
+      .attr("fill", "rgb(0,0,0,0.1)")
+      .attr('stroke', 'rgb(0,0,0,0.5)')
+      .attr('stroke-width', '.3')
+
+      const textWt = (d: any, i: number) => {
+        let xGep = 20;
+        let yGep = 30;
+        let q = i % 2;
+        xGep = q == 0 ? xGep : xGep + (svgWidth / 2);
+        yGep = i <= 1 ? yGep : i <= 3 ? yGep + 30 : yGep + 60;
+
+        let x = -(svgWidth / 2) + xGep;
+        let y = (outerRadius + yGep);
+        const rturnArr = [x,y];
+
+        arcs.append("circle")
+          .attr("cx", x- 10)
+          .attr("cy", y - 6)
+          .attr("r", 7)
+          .style("fill", colorSet(i));
+
+        return rturnArr;
+      }
+
+      const textTitleWt = (d: any, i: number) => {
+        let x = -(svgWidth / 2);
+        let y = (outerRadius + 10);
+        const rturnArr = [x,y];
+
+        return rturnArr;
+      }
+
+    arcs.append("g")
+      .append("text")
+      .attr("text-anchor","start")
+      .attr("transform", (d, i)=>`translate(${textWt(d, i)})`)
+      .text((d)=>d.data.name)
+      .attr("fill", "rgb(255,255,255)")
 
 
   },[props])
