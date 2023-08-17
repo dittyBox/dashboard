@@ -36,6 +36,22 @@ export default function ScoreGauge(props: Props){
     const innerRadius = outerRadius * .5;
     const colorSet = d3.scaleOrdinal(d3.schemeCategory10);
 
+    const mouseoveHandler = () => {
+      tooltipG.style("opacity", 1); 
+    }
+    const mouseoutHandler = () => {
+      tooltipG.style("opacity", 0); 
+    }
+    const mousemoveHandler = (event,d) => {
+      const [x, y] = d3.pointer(event);
+      tooltipG
+        .attr('transform', `translate(${x+10}, ${y-config.titleHeight-10})`)
+        
+      tooltipR.attr("fill", "rgb(255,255,255,1)")
+
+      tooltip.text(`${d.data.name}: ${d.data.value}`).attr("fill", "rgb(0,0,0,1)");
+    }
+
     const vis = svg.append("g")
       .attr("transform", "translate(" + svgWidth / 2 + "," + (svgHeight / 2 - 40) + ")")
       .data([datas])
@@ -50,7 +66,11 @@ export default function ScoreGauge(props: Props){
     .data(pie)
     .enter()
     .append("g")
-    .attr("class","slice");
+    .attr("class","slice")
+    .on("mouseover", mouseoveHandler)
+    .on("mouseout",  mouseoutHandler)
+    .on("mousemove", mousemoveHandler)
+    ;
 
     arcs.append("path")
       .attr("d",arc)
@@ -104,15 +124,31 @@ export default function ScoreGauge(props: Props){
         return rturnArr;
       }
 
+      const tooltipG = vis.append("g").style("opacity", 0)
+        
+      const tooltipR = tooltipG.append("rect")
+        .attr('transform', `translate(0,0)`)
+        .attr("width", config.titleWidth)
+        .attr("height", config.titleHeight)
+        .attr("fill", "rgb(255,255,255,0.8)")
+        .attr('stroke', 'rgb(0,0,0,0.5)')
+        .attr('stroke-width', '1.3')
+
+        const tooltip = tooltipG
+        .append("text")
+        .attr('transform', `translate(10,20)`)
+        .attr("class","tooltip-text")
+        .attr("fill", "rgb(0,0,0,1)")
+
     arcs.append("g")
       .append("text")
       .attr("text-anchor","start")
       .attr("transform", (d, i)=>`translate(${textWt(d, i)})`)
       .text((d)=>d.data.name)
-      .attr("fill", "rgb(255,255,255)")
+      .attr("fill", "rgb(255,255,255)");
 
 
-  },[props])
+  },[props,props.scoreGaugeProps.dataSet])
 
   return (
     <>

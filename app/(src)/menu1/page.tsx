@@ -6,6 +6,7 @@ import FluidGauge from '@/app/api/component/chart/fluidGauge'
 import HalfGauge from '@/app/api/component/chart/halfGauge'
 import HalfScoreGauge from '@/app/api/component/chart/HalfScoreGauge'
 import ScoreGauge from '@/app/api/component/chart/scoreGauge'
+import LineGauge from '@/app/api/component/chart/lineGauge'
 
 const valueColors: circleColorConf[] = [{
   nm: "good",
@@ -273,12 +274,14 @@ const scoreGaugeConfig: scoreGaugeConfig = {
   width: 200,
   height: 200,
   TEXTGAP: 150,
+  titleWidth: 120,
+  titleHeight: 30
 }
 
 const scoreGaugeDataSet: scoreGaugeDataSet[] = [
-  {name: 'TEST001', value: 40},
-  {name: 'TEST002', value: 60},
-  {name: 'TEST003', value: 20},
+  {name: '어쩌구', value: 50},
+  {name: '저쩌구', value: 70},
+  {name: '이렇게', value: 80},
 ]
 
 const scoreGaugeProps: scoreGaugeProps = {
@@ -287,6 +290,22 @@ const scoreGaugeProps: scoreGaugeProps = {
   config: scoreGaugeConfig,
 }
 
+const lineGaugeConfig: lineGaugeConfig = {
+  width: 50,
+  height: 200,
+  barColor: "f0ad4e",
+  id: "dsp273",
+  maximum: 100,
+  minimum: 0,
+  x: 0,
+  y: -200
+}
+
+const lineGaugeProps: lineGaugeProps = {
+  elementID: "scoreGaugeProps",
+  data: 80,
+  config: lineGaugeConfig,
+}
 
 
 export default function Menu1() {
@@ -316,22 +335,25 @@ export default function Menu1() {
       </Grid>
       <Grid xs={12} sx={{ backgroundColor: "rgba(225, 211, 55, 0)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
-          <Grid container direction={"row"} minHeight="250px" spacing={1}>
-            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Circle</Grid>
+          <Grid container direction={"row"} minHeight="280px" spacing={1}>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Pie</Grid>
             <Grid xs={4} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
               <ScoreGauge scoreGaugeProps={scoreGaugeProps} />
             </Grid>
-            <Grid xs={4} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
-            </Grid>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" ></Grid>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Line</Grid>
             <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+              <LineGauge lineGaugeProps={lineGaugeProps} />
+            </Grid>
+            <Grid xs={3} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
             </Grid>
           </Grid>
         </Box>
       </Grid>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 121, 255, 0.1)" }}>
+      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 121, 255, 0)" }}>
         <Box sx={{ border: '1px solid grey', padding: "5px" }}>
           <Grid container direction={"row"} minHeight="150px" spacing={1}>
-            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Half Gauge</Grid>
+            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Half</Grid>
             <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
               <HalfGauge halfGaugeProps={halfGauge1} />
             </Grid>
@@ -340,23 +362,6 @@ export default function Menu1() {
             </Grid>
             <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
               <HalfScoreGauge halfScorefGaugeProps={halfScoreGauge1} />
-            </Grid>
-            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
-            </Grid>
-            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
-            </Grid>
-          </Grid>
-        </Box>
-      </Grid>
-      <Grid xs={12} sx={{ backgroundColor: "rgba(121, 69, 155, 0.1)" }}>
-        <Box sx={{ border: '1px solid grey', padding: "5px" }}>
-          <Grid container direction={"row"} minHeight="150px" spacing={1}>
-            <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Line Gauge</Grid>
-            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
-            </Grid>
-            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
-            </Grid>
-            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
             </Grid>
             <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
             </Grid>

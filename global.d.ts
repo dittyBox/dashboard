@@ -129,14 +129,6 @@ export declare global {
     label?: string;
     selected?: boolean;
   };
-  interface lineGaugeProps {
-    elementID: string;
-    data: number;
-    config: lineGaugeConfig;
-  };
-  interface lineGaugeConfig{
-
-  };
   interface scoreGaugeProps{
     elementID: string;
     dataSet: scoreGaugeDataSet[];
@@ -146,10 +138,31 @@ export declare global {
     width: number;
     height: number;
     TEXTGAP: number;
+    titleWidth: number;
+    titleHeight: number;
   };
   interface scoreGaugeDataSet{
     name: string;
     value: number;
     color?: string;
+  };
+  interface lineGaugeDataSet{
+
   }
+  interface lineGaugeProps {
+    elementID: string;
+    data: lineGaugeDataSet;
+    config: lineGaugeConfig;
+  };
+  interface lineGaugeConfig{
+    width: number;
+    height: number;
+    barColor: string;
+    id: string;
+    maximum: number;
+    minimum: number;
+    height: number;
+    x: number;
+    y: number;
+  };
 }
