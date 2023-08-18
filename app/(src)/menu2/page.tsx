@@ -11,10 +11,10 @@ const stackedBarMargin: stackedBarMargin = {
 }
 
 const stackedBarColumnConf: stackedBarColumnConf[] = [
-  {id: "t1", name: "정상", color: ""},
-  {id: "t2", name: "과다", color: ""},
-  {id: "t3", name: "문제", color: ""},
-  {id: "t4", name: "폐기", color: ""},
+  {id: "t1", name: "정상", color: "#03a9f5"},
+  {id: "t2", name: "과다", color: "#fabc05"},
+  {id: "t3", name: "문제", color: "#8e5d9b"},
+  {id: "t4", name: "폐기", color: "#00b6aa"},
 ] 
 
 const stackedBarConfig: stackedBarConfig = {

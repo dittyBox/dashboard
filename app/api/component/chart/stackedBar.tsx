@@ -6,7 +6,10 @@ interface Props {
   window?: () => Window;
   stackedBarProps: stackedBarProps;
 }
-
+//https://observablehq.com/@baxtea/stacked-bar
+//https://observablehq.com/@jjsiman/binary-timeline
+//https://observablehq.com/d/c335f84596ce9f03
+//https://observablehq.com/@observablehq/plot-grouped-bar-chart
 
 export default function StackedBar(props: Props) {
   const config = props.stackedBarProps.config;
@@ -16,17 +19,25 @@ export default function StackedBar(props: Props) {
 
   const [svgWidth, setSvgWidth] = useState(config.width);
   const [svgHeight, setSvgHeight] = useState(config.height);
+  const [datas,setDatas] = useState(dataSet);
+  const [columns,setColumns] = useState(config.columns);
 
   const svgRef = useRef(null);
 
   useEffect(()=>{
-    
+    setDatas(dataSet);
+    setColumns(config.columns);
+
     const svg = d3.select(svgRef.current);
     svg
     .attr("viewBox", [0, 0, svgWidth, svgHeight]);
     
     svg.selectAll("g").remove();
-
+    columns.map((e)=>{
+      e.data = datas.filter((f)=>f.id == e.id);
+      return e;
+    })
+    
     const x = d3.scaleBand()
     .domain(dataSet.map((d:any) => d.day))
     .range([margin.left, svgWidth - margin.right])
@@ -45,6 +56,27 @@ export default function StackedBar(props: Props) {
     const yAxis = (g: any) => g
     .attr("transform", `translate(${margin.left},0)`)
     .call(d3.axisLeft(y).tickValues(d3.range(0, 301, 30)))
+
+    const bars = svg.append("g")
+      .attr("class", "bars");
+      const s = bars.selectAll("g").data(columns)
+      .join("g")
+        .attr("class", "series")
+        .attr("fill", d => d.color)
+        .selectAll("rect")
+        .data((d:any) => d)
+      // .join("rect") //recall (0,0) is top left corner, thus:
+      //   .attr("x", d => x(d.data.day))
+      //   .attr("y", d => y(d[1])) //y-coordinate determined by top of bar
+      //   .attr("height", d => y(d[0]) - y(d[1])) //height is bottom - top
+      //   .attr("width", x.bandwidth())
+      // .append("title") //Useful for tooltips/accessibility.
+      //   .text(d  => `${d.data.day} ${d.key}: ${d.data[d.key]} hours`);
+
+
+      const xAx = svg.append("g").call(xAxis);
+      const yAx = svg.append("g").call(yAxis);
+
     // X축
 
     // X축 TEXT
@@ -65,8 +97,6 @@ export default function StackedBar(props: Props) {
 
     // Y축 Title
 
-    const bars = svg.append("g")
-    .attr("class", "bars");
     // Bar Data
 
   }, [props, dataSet, config])

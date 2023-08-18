@@ -206,5 +206,6 @@ export declare global {
     id: string;
     name: string;
     color: string;
+    data?: stackedBarDataSet[];
   }
 }
