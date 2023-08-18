@@ -42,13 +42,12 @@ export default function ScoreGauge(props: Props){
     const mouseoutHandler = () => {
       tooltipG.style("opacity", 0); 
     }
-    const mousemoveHandler = (event,d) => {
+    const mousemoveHandler = (event: any,d: any) => {
       const [x, y] = d3.pointer(event);
       tooltipG
         .attr('transform', `translate(${x+10}, ${y-config.titleHeight-10})`)
         
       tooltipR.attr("fill", "rgb(255,255,255,1)")
-
       tooltip.text(`${d.data.name}: ${d.data.value}`).attr("fill", "rgb(0,0,0,1)");
     }
 

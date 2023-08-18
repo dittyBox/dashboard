@@ -10,9 +10,9 @@ interface Props {
 export default function LineGauge(props: Props){
   const config = props.lineGaugeProps.config;
   const elementID = props.lineGaugeProps.elementID;
-  const value = props.lineGaugeProps.data;
+  const value = config.data;
 
-  const [datas, setDatas] = useState(props.lineGaugeProps.data);
+  const [datas, setDatas] = useState(config.data);
   const svgRef = useRef(null);
 
   const [svgWidth, setSvgWidth] = useState(config.width);
@@ -20,7 +20,7 @@ export default function LineGauge(props: Props){
   
   useEffect(()=>{
 
-    setDatas(props.lineGaugeProps.data);
+    setDatas(props.lineGaugeProps.config.data);
 
     setSvgWidth(config.width);
     setSvgHeight(config.height);
@@ -34,6 +34,23 @@ export default function LineGauge(props: Props){
       })
       return returnColor;
     };
+
+    const mouseoveHandler = () => {
+      tooltipG.style("opacity", 1); 
+    }
+    const mouseoutHandler = () => {
+      tooltipG.style("opacity", 0); 
+    }
+    const mousemoveHandler = (event: any,d: any) => {
+      const [x, y] = d3.pointer(event);
+      tooltipG
+        .attr('transform', `translate(${x-(config.titleWidth/2)}, ${y-config.titleHeight})`)
+        
+      tooltipR.attr("fill", "rgb(255,255,255,1)")
+
+      tooltip.text(`${d.data}${d.prefix}`).attr("fill", "rgb(0,0,0,1)");
+    }
+
 
     const svg = d3.select(svgRef.current);
     svg
@@ -52,11 +69,52 @@ export default function LineGauge(props: Props){
         let scale = d3.scaleLinear().domain([valueRnage.min, valueRnage.max]).range([range.start, range.end]);
         return scale(value);
       }
+      
     panel
-        .attr('id', function(d) { console.log(d); return d.id; })
+        .attr('id', function(d) { return d.id; })
         .attr('transform', function(d) { return 'translate(' + [d.x, d.y] + ')'; })
-        .attr('unit', function(d) { return d.unit; })
+        //.attr('unit', function(d) { return d.unit; })
         .attr('prefix', function(d) { return d.prefix || ''; });
+
+        var textMarker = panel
+        .append('g')
+        .attr('class', 'text-markers')
+        .attr('text-anchor', 'start');
+
+        textMarker
+        .selectAll('text')
+        .data(function(d) {
+            var list = [];
+            var percentage = 0;
+            for (var i = 0; i <= 100; i += 10) {
+              percentage = scale({
+                  min: d.minimum || 0,
+                  max: d.maximum || 100
+              }, {
+                  start: 0,
+                  end: 1
+              }, (100 - i));
+              list.push({
+                  label: i,
+                  y: ((d.height) * percentage)
+              });
+            }
+            return list;
+        })
+        .enter()
+        .append('text')
+        .attr('x', 0)
+        .attr('y', function(d) {
+            return (d.y + 20);
+        })
+        .attr('fill', config.scoreColor)
+        .text(function(d) {
+            return d.label;
+        })
+        .attr('font-family','Verdana')
+        .attr('font-weight', 'bold')
+        .style('font-size', '12px');
+    
 
         const bars = panel
         .append('g').classed('bars', true)
@@ -71,7 +129,10 @@ export default function LineGauge(props: Props){
             return d.height + 5 + 'px';
         })
         .attr('width', '20px')
-        .attr('x', '42');
+        .attr('x', '42')
+    .on("mouseover", mouseoveHandler)
+    .on("mouseout",  mouseoutHandler)
+    .on("mousemove", mousemoveHandler);
 
         bars.append('rect').classed('bg', true)
         .attr("transform", "translate(0,14)")
@@ -125,45 +186,6 @@ export default function LineGauge(props: Props){
         .attr('width', '20px')
         .attr('x', '42');
 
-    var textMarker = panel
-        .append('g')
-        .attr('class', 'text-markers')
-        .attr('text-anchor', 'start');
-
-        textMarker
-        .selectAll('text')
-        .data(function(d) {
-            var list = [];
-            var percentage = 0;
-            for (var i = 0; i <= 100; i += 10) {
-              percentage = scale({
-                  min: d.minimum || 0,
-                  max: d.maximum || 100
-              }, {
-                  start: 0,
-                  end: 1
-              }, (100 - i));
-              list.push({
-                  label: i,
-                  y: ((d.height) * percentage)
-              });
-            }
-            return list;
-        })
-        .enter()
-        .append('text')
-        .attr('x', 0)
-        .attr('y', function(d) {
-            return (d.y + 20);
-        })
-        .attr('fill', config.scoreColor)
-        .text(function(d) {
-            return d.label;
-        })
-        .attr('font-family','Verdana')
-        .attr('font-weight', 'bold')
-        .style('font-size', '12px');
-    
 
         panel
             .select('.bars .bg')
@@ -215,11 +237,25 @@ export default function LineGauge(props: Props){
                     if (y < 0) {
                         y = 0;
                     }
-                    console.log(y)
                     element.attr('y', y + 'px');
                 };
             });
 
+            const tooltipG = bars.append("g").style("opacity", 0)
+        
+            const tooltipR = tooltipG.append("rect")
+              .attr('transform', `translate(0,0)`)
+              .attr("width", config.titleWidth)
+              .attr("height", config.titleHeight)
+              .attr("fill", "rgb(255,255,255,0.8)")
+              .attr('stroke', 'rgb(0,0,0,0.5)')
+              .attr('stroke-width', '1.3')
+      
+              const tooltip = tooltipG
+              .append("text")
+              .attr('transform', `translate(5,20)`)
+              .attr("class","tooltip-text")
+              .attr("fill", "rgb(0,0,0,1)")
 
   },[props,config])
 

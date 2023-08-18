@@ -146,12 +146,8 @@ export declare global {
     value: number;
     color?: string;
   };
-  interface lineGaugeDataSet{
-
-  }
   interface lineGaugeProps {
     elementID: string;
-    data: lineGaugeDataSet;
     config: lineGaugeConfig;
     colorConf: lineColorConf[];
   };
@@ -163,16 +159,52 @@ export declare global {
     scoreColor: string;
     pointerColor: string;
     id: string;
+    unit?: string;
     maximum: number;
     minimum: number;
     height: number;
     x: number;
     y: number;
+    titleWidth: number;
+    titleHeight: number;
+    data: number;
+    prefix: string;
   };
   interface lineColorConf{
     nm: string;
     max: number;
     min: number;
+    color: string;
+  };
+  interface stackedBarProps{
+    elementID: string;
+    config: stackedBarConfig;
+    data: stackedBarDataSet[];
+  };
+  interface stackedBarConfig{
+    width: number;
+    height: number;
+    margin: stackedBarMargin;
+    columns: stackedBarColumnConf[];
+    xTitleColor: string;
+    xTitle: string;
+    maximum: number;
+    minimum: number;
+  };
+  interface stackedBarDataSet{
+    id: string;
+    date: string;
+    value: number;
+  };
+  interface stackedBarMargin {
+    top:  number;
+    right:  number;
+    bottom:  number;
+    left:  number;
+  };
+  interface stackedBarColumnConf {
+    id: string;
+    name: string;
     color: string;
   }
 }

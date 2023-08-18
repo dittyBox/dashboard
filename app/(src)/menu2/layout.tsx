@@ -22,19 +22,18 @@ const Menu2Layout = (props: Props) => {
     }
 
     return (
-        <div>
-            <Grid container spacing={3}>
-                <Grid xs={12} height={"30px"}>
+            <Grid container minHeight={"calc(100vh - 50px)"}  direction={"column"}
+            sx={{marginTop:"48px"}}>
+                <Grid>
                     <Typography color="burlywood" style={{textAlign:"center",
-                    fontSize:"30px", fontWeight:"bold"}} >
+                    fontSize:"30px", fontWeight:"bold", height:"50px"}} >
                         {menuItem.menuName}
                     </Typography>
                 </Grid>
-                <Grid xs={12}>
-                    <div>{props.children}</div>
+                <Grid container sx={{height:"calc(100vh - 100px)"}}>
+                    {props.children}
                 </Grid>
             </Grid>
-        </div>
     );
 };
 export default Menu2Layout;

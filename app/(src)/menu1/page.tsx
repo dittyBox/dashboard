@@ -301,7 +301,11 @@ const lineGaugeConfig: lineGaugeConfig = {
   maximum: 100,
   minimum: 0,
   x: 0,
-  y: -200
+  y: -200,
+  titleWidth: 40,
+  titleHeight: 25,
+  data: 65,
+  prefix: "%"
 }
 
 const valueLineColors: lineColorConf[] = [{
@@ -323,7 +327,6 @@ const valueLineColors: lineColorConf[] = [{
 
 const lineGaugeProps: lineGaugeProps = {
   elementID: "scoreGaugeProps",
-  data: 65,
   config: lineGaugeConfig,
   colorConf: valueLineColors,
 }
@@ -339,7 +342,11 @@ const lineGaugeConfig1: lineGaugeConfig = {
   maximum: 100,
   minimum: 0,
   x: 0,
-  y: -200
+  y: -200,
+  titleWidth: 40,
+  titleHeight: 25,
+  data: 30,
+  prefix: "%"
 }
 
 const valueLineColors1: lineColorConf[] = [{
@@ -361,7 +368,6 @@ const valueLineColors1: lineColorConf[] = [{
 
 const lineGaugeProps1: lineGaugeProps = {
   elementID: "scoreGaugeProps1",
-  data: 30,
   config: lineGaugeConfig1,
   colorConf: valueLineColors1,
 }
