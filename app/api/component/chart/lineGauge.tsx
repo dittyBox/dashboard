@@ -25,7 +25,15 @@ export default function LineGauge(props: Props){
     setSvgWidth(config.width);
     setSvgHeight(config.height);
 
-    console.log(svgHeight)
+    const baseColor = (vl: lineColorConf[], defaultVl: number) => {
+      let returnColor: string = '#fff';
+      vl.forEach(el=>{
+        if(defaultVl <= el.max && defaultVl >= el.min){
+          returnColor = el.color;
+        }
+      })
+      return returnColor;
+    };
 
     const svg = d3.select(svgRef.current);
     svg
@@ -53,44 +61,69 @@ export default function LineGauge(props: Props){
         const bars = panel
         .append('g').classed('bars', true)
 
-        bars.append('rect').classed('bg', true)
-        .attr('height', function(d) {
-          
-            var initValue = this.getAttribute('preValue') || 0;
-
-            var percentage = scale({
-                min: d.minimum || 0,
-                max: d.maximum || 100
-            }, {
-                start: 0,
-                end: 1
-            }, (100 - initValue));
-            
-            var height = d.height * percentage;
-      
-            if ((height - 10) < 0) {
-                height = 10;
-            }
-
-            return height + 'px';
+        bars
+        .append('rect').attr('class', 'value')
+        .attr("transform", "translate(0,14)")
+        .attr('fill', (d) => {
+          return baseColor(props.lineGaugeProps.colorConf,Number(datas));
         })
+        .attr('height', function(d) {
+            return d.height + 5 + 'px';
+        })
+        .attr('width', '20px')
+        .attr('x', '42');
+
+        bars.append('rect').classed('bg', true)
+        .attr("transform", "translate(0,14)")
+        .attr('fill', (b)=>b.barColor)
+        .attr('height', function(d) {
+            var initValue = Number(this.getAttribute('preValue')) || 0;
+  
+             var percentage = scale({
+                 min: d.minimum || 0,
+                 max: d.maximum || 100
+             }, {
+                 start: 0,
+                 end: 1
+             }, (100 - initValue));
+             
+              var height = d.height * percentage;
+        
+              if ((height - 10) < 0) {
+                  height = 10;
+              }
+  
+              return height + 5 + 'px';
+        })
+        .attr('width', '20px')
+        .attr('x', '42');
+
 
         bars.append('rect').classed('pointer', true)
-        .attr("y", function(d) {
-            var initValue = this.getAttribute('preValue') || 0;
-            var percentage = scale({
-                min: d.minimum || 0,
-                max: d.maximum || 100
-            }, {
-                start: 0,
-                end: 1
-            }, (100 - initValue));
-            var y = (d.height * percentage);
-            if (y < 0) {
-                y = 0;
-            }
-            return y + 'px';
-        });
+        .attr("transform", "translate(0,14)")
+        .attr('fill', (d)=>d.pointerColor)
+        .attr('height', '4px')
+        .attr('y', function(d) {
+            var initValue = Number(this.getAttribute('preValue')) || 0;
+            
+             var percentage = scale({
+                 min: d.minimum || 0,
+                 max: d.maximum || 100
+             }, {
+                 start: 0,
+                 end: 1
+             }, (100 - initValue));
+              
+              var y = (d.height * percentage);
+        
+              if (y < 0) {
+                  y = 0;
+              }
+  
+              return y + 'px';
+        })
+        .attr('width', '20px')
+        .attr('x', '42');
 
     var textMarker = panel
         .append('g')
@@ -121,9 +154,9 @@ export default function LineGauge(props: Props){
         .append('text')
         .attr('x', 0)
         .attr('y', function(d) {
-            return (d.y);
+            return (d.y + 20);
         })
-        .attr('fill', '#555')
+        .attr('fill', config.scoreColor)
         .text(function(d) {
             return d.label;
         })
@@ -132,7 +165,60 @@ export default function LineGauge(props: Props){
         .style('font-size', '12px');
     
 
+        panel
+            .select('.bars .bg')
+            .transition()
+            .duration(1000)
+            .tween("number", function(d) {
+                var element = d3.select(this);
+                var preValue = element.attr('preValue') || d.minimum;
+                var percentage = scale({
+                    min: d.minimum || 0,
+                    max: d.maximum || 100
+                }, {
+                    start: 0,
+                    end: 1
+                }, (100 - Number(datas)));
+                var i = d3.interpolateNumber(Number(preValue), percentage);
 
+                element.attr('preValue', percentage);
+
+                return function(t) {
+                    var height = d.height * i(t);
+                    if ((height - 10) < 0) {
+                        height = 10;
+                    }
+                    element.attr('height', height + 'px');
+                };
+            });
+
+        panel
+            .select('.bars .pointer')
+            .transition()
+            .duration(1000)
+            .tween("number", function(d) {
+                var element = d3.select(this);
+                var preValue = element.attr('preValue') || d.minimum;
+                var percentage = scale({
+                    min: d.minimum || 0,
+                    max: d.maximum || 100
+                }, {
+                    start: 0,
+                    end: 1
+                }, (100 - Number(datas)));
+                var i = d3.interpolateNumber(Number(preValue), percentage);
+
+                element.attr('preValue', percentage);
+
+                return function(t) {
+                    var y = (d.height * i(t));
+                    if (y < 0) {
+                        y = 0;
+                    }
+                    console.log(y)
+                    element.attr('y', y + 'px');
+                };
+            });
 
 
   },[props,config])

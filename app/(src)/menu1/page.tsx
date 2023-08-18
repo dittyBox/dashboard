@@ -291,9 +291,12 @@ const scoreGaugeProps: scoreGaugeProps = {
 }
 
 const lineGaugeConfig: lineGaugeConfig = {
-  width: 50,
+  width: 80,
   height: 200,
-  barColor: "f0ad4e",
+  barColor: "#777777",
+  valueColor:"#f0ad4e",
+  scoreColor: "#fff",
+  pointerColor:"#fff",
   id: "dsp273",
   maximum: 100,
   minimum: 0,
@@ -301,10 +304,66 @@ const lineGaugeConfig: lineGaugeConfig = {
   y: -200
 }
 
+const valueLineColors: lineColorConf[] = [{
+  nm: "good",
+  max: 100,
+  min: 71,
+  color: '#c1f497'
+}, {
+  nm: "normal",
+  max: 70,
+  min: 41,
+  color: '#fced7b'
+}, {
+  nm: "bad",
+  max: 40,
+  min: 0,
+  color: '#f26d80'
+}];
+
 const lineGaugeProps: lineGaugeProps = {
   elementID: "scoreGaugeProps",
-  data: 80,
+  data: 65,
   config: lineGaugeConfig,
+  colorConf: valueLineColors,
+}
+
+const lineGaugeConfig1: lineGaugeConfig = {
+  width: 80,
+  height: 200,
+  barColor: "#777777",
+  valueColor:"#f0ad4e",
+  scoreColor: "#fff",
+  pointerColor:"#fff",
+  id: "dsp273",
+  maximum: 100,
+  minimum: 0,
+  x: 0,
+  y: -200
+}
+
+const valueLineColors1: lineColorConf[] = [{
+  nm: "good",
+  max: 100,
+  min: 71,
+  color: '#c1f497'
+}, {
+  nm: "normal",
+  max: 70,
+  min: 41,
+  color: '#fced7b'
+}, {
+  nm: "bad",
+  max: 40,
+  min: 0,
+  color: '#f26d80'
+}];
+
+const lineGaugeProps1: lineGaugeProps = {
+  elementID: "scoreGaugeProps1",
+  data: 30,
+  config: lineGaugeConfig1,
+  colorConf: valueLineColors1,
 }
 
 
@@ -342,8 +401,11 @@ export default function Menu1() {
             </Grid>
             <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" ></Grid>
             <Grid xs={1} maxWidth={'60px'} display="flex" justifyContent="center" alignItems="center" >Line</Grid>
-            <Grid xs={2} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+            <Grid xs={1} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
               <LineGauge lineGaugeProps={lineGaugeProps} />
+            </Grid>
+            <Grid xs={1} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
+              <LineGauge lineGaugeProps={lineGaugeProps1} />
             </Grid>
             <Grid xs={3} maxWidth={'180px'} display="flex" justifyContent="center" alignItems="center" >
             </Grid>

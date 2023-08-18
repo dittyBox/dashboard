@@ -153,11 +153,15 @@ export declare global {
     elementID: string;
     data: lineGaugeDataSet;
     config: lineGaugeConfig;
+    colorConf: lineColorConf[];
   };
   interface lineGaugeConfig{
     width: number;
     height: number;
     barColor: string;
+    valueColor: string;
+    scoreColor: string;
+    pointerColor: string;
     id: string;
     maximum: number;
     minimum: number;
@@ -165,4 +169,10 @@ export declare global {
     x: number;
     y: number;
   };
+  interface lineColorConf{
+    nm: string;
+    max: number;
+    min: number;
+    color: string;
+  }
 }
