@@ -190,6 +190,7 @@ export declare global {
     xTitle: string;
     maximum: number;
     minimum: number;
+    valueGap: number;
   };
   interface stackedBarDataSet{
     id: string;
@@ -203,9 +204,46 @@ export declare global {
     left:  number;
   };
   interface stackedBarColumnConf {
+    index?: number;
+    sort: number;
     id: string;
     name: string;
     color: string;
     data?: stackedBarDataSet[];
-  }
+  };
+  interface verticalGroupBarProps{
+    elementID: string;
+    config: verticalGroupBarConfig;
+    data: verticalGroupBarSet[];
+  };
+  interface verticalGroupBarMargin {
+    top:  number;
+    right:  number;
+    bottom:  number;
+    left:  number;
+  };
+  interface verticalGroupBarSet{
+    id: string;
+    date: string;
+    value: number;
+  };
+  interface verticalGroupBarColumnConf {
+    index?: number;
+    sort: number;
+    id: string;
+    name: string;
+    color: string;
+    data?: verticalGroupBarSet[];
+  };
+  interface verticalGroupBarConfig{
+    width: number;
+    height: number;
+    margin: verticalGroupBarMargin;
+    columns: verticalGroupBarColumnConf[];
+    xTitleColor: string;
+    xTitle: string;
+    maximum: number;
+    minimum: number;
+    valueGap: number;
+  };
 }

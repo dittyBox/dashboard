@@ -6,16 +6,27 @@ import * as t1 from '@/app/api/fech/stackedBarTest';
 const stackedBarMargin: stackedBarMargin = {
   top: 10,
   right: 10,
-  bottom: 20,
-  left: 40,
+  bottom: 10,
+  left: 35,
 }
 
 const stackedBarColumnConf: stackedBarColumnConf[] = [
-  {id: "t1", name: "정상", color: "#03a9f5"},
-  {id: "t2", name: "과다", color: "#fabc05"},
-  {id: "t3", name: "문제", color: "#8e5d9b"},
-  {id: "t4", name: "폐기", color: "#00b6aa"},
+  {sort: 3, id: "t4", name: "폐기", color: "#2f7593"},
+  {sort: 0, id: "t1", name: "정상", color: "#7cd865"},
+  {sort: 1, id: "t2", name: "과다", color: "#4477dd"},
+  {sort: 2, id: "t3", name: "문제", color: "#ea8c2e"},
 ] 
+
+
+const stackedBarDataSet: stackedBarDataSet[] = t1.getStackedBarDataSet;
+
+// const minValue = stackedBarDataSet.reduce((prev, curr) => {
+//   return prev.value <= curr.value ? prev : curr;
+// }).value;
+
+// const maxValue = stackedBarDataSet.reduce((prev, curr) => {
+//   return prev.value <= curr.value ? curr : prev;
+// }).value;
 
 const stackedBarConfig: stackedBarConfig = {
   width: 600,
@@ -24,11 +35,10 @@ const stackedBarConfig: stackedBarConfig = {
   columns: stackedBarColumnConf,
   xTitleColor: "",
   xTitle: "",
-  minimum: 20,
-  maximum: 14,
+  minimum: 0,
+  maximum: 300,
+  valueGap: 30,
 }
-
-const stackedBarDataSet: stackedBarDataSet[] = t1.getStackedBarDataSet;
 
 const stackedBarProps: stackedBarProps = {
   elementID: "stackedBar",
