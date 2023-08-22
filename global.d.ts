@@ -191,6 +191,7 @@ export declare global {
     maximum: number;
     minimum: number;
     valueGap: number;
+    textBoxH: number;
   };
   interface stackedBarDataSet{
     id: string;
@@ -214,7 +215,7 @@ export declare global {
   interface verticalGroupBarProps{
     elementID: string;
     config: verticalGroupBarConfig;
-    data: verticalGroupBarSet[];
+    data: verticalGroupBarDataSet[];
   };
   interface verticalGroupBarMargin {
     top:  number;
@@ -222,7 +223,9 @@ export declare global {
     bottom:  number;
     left:  number;
   };
-  interface verticalGroupBarSet{
+  interface verticalGroupBarDataSet{
+    item: string;
+    itemName: string;
     id: string;
     date: string;
     value: number;
@@ -233,7 +236,7 @@ export declare global {
     id: string;
     name: string;
     color: string;
-    data?: verticalGroupBarSet[];
+    data?: verticalGroupBarDataSet[];
   };
   interface verticalGroupBarConfig{
     width: number;
@@ -245,5 +248,6 @@ export declare global {
     maximum: number;
     minimum: number;
     valueGap: number;
+    textBoxH: number;
   };
 }

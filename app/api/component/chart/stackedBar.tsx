@@ -91,7 +91,6 @@ export default function StackedBar(props: Props) {
       })
       dataSetAll.push({ ...t, dataAll: sdata_ })
     })
-    const textBoxH = 50;
     const x = d3.scaleBand()
       .domain(timeRange.map((d) => d))
       .range([margin.left, svgWidth - margin.right])
@@ -100,10 +99,10 @@ export default function StackedBar(props: Props) {
     const y = d3.scaleLinear()
       .domain([config.minimum, maximum])
       //.domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
-      .rangeRound([svgHeight - margin.bottom - textBoxH, margin.top])
+      .rangeRound([svgHeight - margin.bottom - config.textBoxH, margin.top])
 
     const xAxis = (g: any) => g
-      .attr("transform", `translate(0, ${svgHeight - margin.bottom - textBoxH})`)
+      .attr("transform", `translate(0, ${svgHeight - margin.bottom - config.textBoxH})`)
       .call(d3.axisBottom(x).tickSizeOuter(0))
     // .call(g => g.selectAll(".domain").remove()) //Gets rid of border line
 
@@ -141,7 +140,7 @@ export default function StackedBar(props: Props) {
       .join("rect")
       .attr("fill", d => d.color)
       .attr("x", d=>{ console.log(d); return txtRange[d.index]})
-      .attr("y",svgHeight - textBoxH/2)
+      .attr("y",svgHeight - config.textBoxH/2)
       .attr("height", 10)
       .attr("width", 10)
 
@@ -152,7 +151,7 @@ export default function StackedBar(props: Props) {
       .join("text")
       .attr("fill", "#ffffff")
       .attr("x", d=>{ console.log(d); return txtRange[d.index] + 15})
-      .attr("y",svgHeight - textBoxH/2)
+      .attr("y",svgHeight - config.textBoxH/2)
       .attr("dy", "0.7em")
       .text(d=>d.name)
 
